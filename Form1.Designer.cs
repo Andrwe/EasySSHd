@@ -46,7 +46,7 @@
             this.SSLTabPage = new System.Windows.Forms.TabPage();
             this.PathToCertificateComboBox = new System.Windows.Forms.ComboBox();
             this.PathToCertificateLabel = new System.Windows.Forms.Label();
-            this.LoginOnlyWithCertificateCheckBox = new System.Windows.Forms.CheckBox();
+            this.LoginPossibleWithCertificateCheckBox = new System.Windows.Forms.CheckBox();
             this.CompressionTabPage = new System.Windows.Forms.TabPage();
             this.UseCompressionCheckBox = new System.Windows.Forms.CheckBox();
             this.CheckingTabPage = new System.Windows.Forms.TabPage();
@@ -67,6 +67,7 @@
             this.StopButton = new System.Windows.Forms.Button();
             this.HelpLinkLabel = new System.Windows.Forms.LinkLabel();
             this.DefaultsButton = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.ServerConnectionGB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ServerPortNumericUpDown)).BeginInit();
             this.LoginSecurityGB.SuspendLayout();
@@ -299,7 +300,7 @@
             this.SSLTabPage.BackColor = System.Drawing.SystemColors.Control;
             this.SSLTabPage.Controls.Add(this.PathToCertificateComboBox);
             this.SSLTabPage.Controls.Add(this.PathToCertificateLabel);
-            this.SSLTabPage.Controls.Add(this.LoginOnlyWithCertificateCheckBox);
+            this.SSLTabPage.Controls.Add(this.LoginPossibleWithCertificateCheckBox);
             this.SSLTabPage.Location = new System.Drawing.Point(4, 25);
             this.SSLTabPage.Name = "SSLTabPage";
             this.SSLTabPage.Padding = new System.Windows.Forms.Padding(3);
@@ -325,17 +326,17 @@
             this.PathToCertificateLabel.TabIndex = 2;
             this.PathToCertificateLabel.Text = "Path to Certificate";
             // 
-            // LoginOnlyWithCertificateCheckBox
+            // LoginPossibleWithCertificateCheckBox
             // 
-            this.LoginOnlyWithCertificateCheckBox.AutoSize = true;
-            this.LoginOnlyWithCertificateCheckBox.Checked = true;
-            this.LoginOnlyWithCertificateCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.LoginOnlyWithCertificateCheckBox.Location = new System.Drawing.Point(21, 22);
-            this.LoginOnlyWithCertificateCheckBox.Name = "LoginOnlyWithCertificateCheckBox";
-            this.LoginOnlyWithCertificateCheckBox.Size = new System.Drawing.Size(175, 20);
-            this.LoginOnlyWithCertificateCheckBox.TabIndex = 1;
-            this.LoginOnlyWithCertificateCheckBox.Text = "Login only with Certificate";
-            this.LoginOnlyWithCertificateCheckBox.UseVisualStyleBackColor = true;
+            this.LoginPossibleWithCertificateCheckBox.AutoSize = true;
+            this.LoginPossibleWithCertificateCheckBox.Checked = true;
+            this.LoginPossibleWithCertificateCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.LoginPossibleWithCertificateCheckBox.Location = new System.Drawing.Point(21, 22);
+            this.LoginPossibleWithCertificateCheckBox.Name = "LoginPossibleWithCertificateCheckBox";
+            this.LoginPossibleWithCertificateCheckBox.Size = new System.Drawing.Size(199, 20);
+            this.LoginPossibleWithCertificateCheckBox.TabIndex = 1;
+            this.LoginPossibleWithCertificateCheckBox.Text = "Login possible with Certificate";
+            this.LoginPossibleWithCertificateCheckBox.UseVisualStyleBackColor = true;
             // 
             // CompressionTabPage
             // 
@@ -439,6 +440,7 @@
             // InfoTabPage
             // 
             this.InfoTabPage.BackColor = System.Drawing.SystemColors.Control;
+            this.InfoTabPage.Controls.Add(this.textBox1);
             this.InfoTabPage.Controls.Add(this.PrintLastLoginCheckBox);
             this.InfoTabPage.Controls.Add(this.PrintMessageOfTheDayCheckBox);
             this.InfoTabPage.Controls.Add(this.MessageBeforeLoginLabel);
@@ -448,6 +450,7 @@
             this.InfoTabPage.Size = new System.Drawing.Size(522, 128);
             this.InfoTabPage.TabIndex = 3;
             this.InfoTabPage.Text = "Info";
+            this.InfoTabPage.ToolTipText = "information printed before or after login";
             // 
             // PrintLastLoginCheckBox
             // 
@@ -466,7 +469,7 @@
             this.PrintMessageOfTheDayCheckBox.AutoSize = true;
             this.PrintMessageOfTheDayCheckBox.Checked = true;
             this.PrintMessageOfTheDayCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.PrintMessageOfTheDayCheckBox.Location = new System.Drawing.Point(24, 99);
+            this.PrintMessageOfTheDayCheckBox.Location = new System.Drawing.Point(289, 20);
             this.PrintMessageOfTheDayCheckBox.Name = "PrintMessageOfTheDayCheckBox";
             this.PrintMessageOfTheDayCheckBox.Size = new System.Drawing.Size(213, 20);
             this.PrintMessageOfTheDayCheckBox.TabIndex = 2;
@@ -487,7 +490,7 @@
             this.MessageBeforeLoginTextBox.Location = new System.Drawing.Point(24, 43);
             this.MessageBeforeLoginTextBox.Multiline = true;
             this.MessageBeforeLoginTextBox.Name = "MessageBeforeLoginTextBox";
-            this.MessageBeforeLoginTextBox.Size = new System.Drawing.Size(475, 50);
+            this.MessageBeforeLoginTextBox.Size = new System.Drawing.Size(206, 50);
             this.MessageBeforeLoginTextBox.TabIndex = 0;
             // 
             // LoggingBox
@@ -555,6 +558,14 @@
             this.DefaultsButton.Text = "Defaults";
             this.DefaultsButton.UseVisualStyleBackColor = true;
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(289, 43);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(210, 50);
+            this.textBox1.TabIndex = 4;
+            // 
             // EasySSHdWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -618,7 +629,7 @@
         private System.Windows.Forms.Button StartButton;
         private System.Windows.Forms.Button StopButton;
         private System.Windows.Forms.TextBox ServerAddressTextBox;
-        private System.Windows.Forms.CheckBox LoginOnlyWithCertificateCheckBox;
+        private System.Windows.Forms.CheckBox LoginPossibleWithCertificateCheckBox;
         private System.Windows.Forms.LinkLabel HelpLinkLabel;
         private System.Windows.Forms.NumericUpDown ServerPortNumericUpDown;
         private System.Windows.Forms.NumericUpDown MaxSessionsNumericUpDown;
@@ -641,6 +652,7 @@
         private System.Windows.Forms.CheckBox PrintLastLoginCheckBox;
         private System.Windows.Forms.CheckBox PrintMessageOfTheDayCheckBox;
         private System.Windows.Forms.Button DefaultsButton;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 
