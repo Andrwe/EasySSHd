@@ -56,6 +56,7 @@
             this.TestConnectionOfClientEveryNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.TestIfClientIsStillReachableCheckBox = new System.Windows.Forms.CheckBox();
             this.InfoTabPage = new System.Windows.Forms.TabPage();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.PrintLastLoginCheckBox = new System.Windows.Forms.CheckBox();
             this.PrintMessageOfTheDayCheckBox = new System.Windows.Forms.CheckBox();
             this.MessageBeforeLoginLabel = new System.Windows.Forms.Label();
@@ -67,7 +68,6 @@
             this.StopButton = new System.Windows.Forms.Button();
             this.HelpLinkLabel = new System.Windows.Forms.LinkLabel();
             this.DefaultsButton = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.ServerConnectionGB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ServerPortNumericUpDown)).BeginInit();
             this.LoginSecurityGB.SuspendLayout();
@@ -349,7 +349,6 @@
             this.CompressionTabPage.TabIndex = 1;
             this.CompressionTabPage.Text = "Compression";
             this.CompressionTabPage.ToolTipText = "activate or deactivate compression";
-            this.CompressionTabPage.Click += new System.EventHandler(this.CompressionTabPage_Click);
             // 
             // UseCompressionCheckBox
             // 
@@ -452,6 +451,14 @@
             this.InfoTabPage.Text = "Info";
             this.InfoTabPage.ToolTipText = "information printed before or after login";
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(289, 43);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(210, 50);
+            this.textBox1.TabIndex = 4;
+            // 
             // PrintLastLoginCheckBox
             // 
             this.PrintLastLoginCheckBox.AutoSize = true;
@@ -520,6 +527,7 @@
             this.CancelButton.TabIndex = 10;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
+            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // StartButton
             // 
@@ -557,14 +565,6 @@
             this.DefaultsButton.TabIndex = 14;
             this.DefaultsButton.Text = "Defaults";
             this.DefaultsButton.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(289, 43);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(210, 50);
-            this.textBox1.TabIndex = 4;
             // 
             // EasySSHdWindow
             // 
