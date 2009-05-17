@@ -81,9 +81,14 @@ namespace EasySSHd
             ConcurrentLoginsNumericUpDown.Value = 10;
             MaxSessionsNumericUpDown.Value = 10;
             LoginPossibleWithCertificateCheckBox.Checked = true;
-
+            CompressionComboBox.Text = "delayed";
+            TestIfClientIsStillReachableCheckBox.Checked = true;
+            TestConnectionOfClientEveryNumericUpDown.Value = 0;
+            PassesNumericUpDown.Value = 3;
             MessageBeforeLoginTextBox.Text = "";
-            Mess
+            PrintMessageOfTheDayCheckBox.Checked = true;
+            PrintMessageOfTheDayTextBox.Text = "";
+            PrintLastLoginCheckBox.Checked = true;
         }
 
         private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
