@@ -1,4 +1,44 @@
-﻿using System;
+﻿/*
+ * ****************************************************************************************************
+ * Develloper-Team:                      RENONA-Studios
+ * Develloper:                           Andrwe Lord Weber
+ *                                       Seiichiro0185
+ *                                       Lokozar
+ * IRC:                                  #renona-studios@irc.freenode.net
+ * E-Mail:                               support@renona-studios.org
+ * ****************************************************************************************************
+ * This is a file parser class. 
+ * It reads and writes a given file, searchs and changes the value of an option in this file.
+ * It also exclude comments starting with #.
+ * 
+ * class global variables:
+ * name: fileContent
+ * type: ArrayList
+ * 
+ * 
+ * functions:
+ * 
+ * name:        readFile
+ * type:        Integer
+ * parameter:   string file
+ * 
+ * name:        writeFile
+ * type:        Integer
+ * parameter:   string file
+ * 
+ * name:        getValue
+ * type:        string
+ * parameter:   string option
+ * 
+ * name:        setValue
+ * type:        void
+ * parameter:   string option, string value
+ * 
+ * name:        searchLine
+ * type:        Integer
+ * parameter:   string option
+ */
+using System;
 using System.Collections;
 using System.Linq;
 using System.Text;
