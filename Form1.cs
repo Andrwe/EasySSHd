@@ -58,5 +58,32 @@ namespace EasySSHd
                 }
             }
         }
+
+        // Save changes
+        private void ApplyButton_Click(object sender, EventArgs e)
+        {
+            if (this.changed)
+            {
+                if (this.SaveChanges())
+                {
+                    MessageBox.Show("Changes saved successfully", "EasySSHd", MessageBoxButtons.OK);
+                }
+            }
+        }
+
+        // Load default values
+        private void DefaultsButton_Click(object sender, EventArgs e)
+        {
+            ServerAddressTextBox.Text = "0.0.0.0";
+            ServerPortNumericUpDown.Value = 22;
+            LoginTimeNumericUpDown.Value = 120;
+            MaxAuthTriesNumericUpDown.Value = 6;
+            ConcurrentLoginsNumericUpDown.Value = 10;
+            MaxSessionsNumericUpDown.Value = 10;
+            LoginPossibleWithCertificateCheckBox.Checked = true;
+
+            MessageBeforeLoginTextBox.Text = "";
+            Mess
+        }
     }
 }

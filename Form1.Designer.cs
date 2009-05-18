@@ -56,7 +56,7 @@
             this.TestConnectionOfClientEveryNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.TestIfClientIsStillReachableCheckBox = new System.Windows.Forms.CheckBox();
             this.InfoTabPage = new System.Windows.Forms.TabPage();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.PrintMessageOfTheDayTextBox = new System.Windows.Forms.TextBox();
             this.PrintLastLoginCheckBox = new System.Windows.Forms.CheckBox();
             this.PrintMessageOfTheDayCheckBox = new System.Windows.Forms.CheckBox();
             this.MessageBeforeLoginLabel = new System.Windows.Forms.Label();
@@ -439,7 +439,7 @@
             // InfoTabPage
             // 
             this.InfoTabPage.BackColor = System.Drawing.SystemColors.Control;
-            this.InfoTabPage.Controls.Add(this.textBox1);
+            this.InfoTabPage.Controls.Add(this.PrintMessageOfTheDayTextBox);
             this.InfoTabPage.Controls.Add(this.PrintLastLoginCheckBox);
             this.InfoTabPage.Controls.Add(this.PrintMessageOfTheDayCheckBox);
             this.InfoTabPage.Controls.Add(this.MessageBeforeLoginLabel);
@@ -451,13 +451,13 @@
             this.InfoTabPage.Text = "Info";
             this.InfoTabPage.ToolTipText = "information printed before or after login";
             // 
-            // textBox1
+            // PrintMessageOfTheDayTextBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(289, 43);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(210, 50);
-            this.textBox1.TabIndex = 4;
+            this.PrintMessageOfTheDayTextBox.Location = new System.Drawing.Point(289, 43);
+            this.PrintMessageOfTheDayTextBox.Multiline = true;
+            this.PrintMessageOfTheDayTextBox.Name = "PrintMessageOfTheDayTextBox";
+            this.PrintMessageOfTheDayTextBox.Size = new System.Drawing.Size(210, 50);
+            this.PrintMessageOfTheDayTextBox.TabIndex = 4;
             // 
             // PrintLastLoginCheckBox
             // 
@@ -518,6 +518,7 @@
             this.ApplyButton.TabIndex = 9;
             this.ApplyButton.Text = "Apply";
             this.ApplyButton.UseVisualStyleBackColor = true;
+            this.ApplyButton.Click += new System.EventHandler(this.ApplyButton_Click);
             // 
             // CancelButton
             // 
@@ -565,6 +566,7 @@
             this.DefaultsButton.TabIndex = 14;
             this.DefaultsButton.Text = "Defaults";
             this.DefaultsButton.UseVisualStyleBackColor = true;
+            this.DefaultsButton.Click += new System.EventHandler(this.DefaultsButton_Click);
             // 
             // EasySSHdWindow
             // 
@@ -652,7 +654,7 @@
         private System.Windows.Forms.CheckBox PrintLastLoginCheckBox;
         private System.Windows.Forms.CheckBox PrintMessageOfTheDayCheckBox;
         private System.Windows.Forms.Button DefaultsButton;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox PrintMessageOfTheDayTextBox;
     }
 }
 
