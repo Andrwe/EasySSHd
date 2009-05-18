@@ -1,42 +1,15 @@
 ﻿/*
  * ****************************************************************************************************
- * Develloper-Team:                      RENONA-Studios
- * Develloper:                           Andrwe Lord Weber
- *                                       Seiichiro0185
- *                                       Lokozar
- * IRC:                                  #renona-studios@irc.freenode.net
- * E-Mail:                               support@renona-studios.org
+ * Developer-Team:                       RENONA-Studios                                               *
+ * Developer:                            Andrwe Lord Weber                                            *
+ *                                       Seiichiro0185                                                *
+ *                                       Lokozar                                                      *
+ * IRC:                                  #renona-studios@irc.freenode.net                             *
+ * E-Mail:                               support@renona-studios.org                                   *
  * ****************************************************************************************************
- * This is a file parser class. 
- * It reads and writes a given file, searchs and changes the value of an option in this file.
- * It also exclude comments starting with #.
- * 
- * class global variables:
- * name: fileContent
- * type: ArrayList
- * 
- * 
- * functions:
- * 
- * name:        readFile
- * type:        Integer
- * parameter:   string file
- * 
- * name:        writeFile
- * type:        Integer
- * parameter:   string file
- * 
- * name:        getValue
- * type:        string
- * parameter:   string option
- * 
- * name:        setValue
- * type:        void
- * parameter:   string option, string value
- * 
- * name:        searchLine
- * type:        Integer
- * parameter:   string option
+ * This is a file parser class for a ssh-config. 
+ * It reads and writes a given file, searches and changes the value of an option in this file.
+ * It also excludes comments starting with #.
  */
 using System;
 using System.Collections;
