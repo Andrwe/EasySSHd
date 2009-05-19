@@ -24,7 +24,53 @@ namespace EasySSHd
         // Called on Window Load, Initialize all Values
         private void EasySSHdWindow_Load(object sender, EventArgs e)
         {
+            string ListenAddress = ConfigParser.getValue("ListenAddress");
+            string Port = ConfigParser.getValue("Port");
+            string LoginGraceTime = ConfigParser.getValue("LoginGraceTime");
+            string MaxAuthTries = ConfigParser.getValue("MaxAuthTries");
+            string MaxSessions = ConfigParser.getValue("MaxSessions");
+            string PubkeyAuthentication = ConfigParser.getValue("PubkeyAuthentication");
+            string AuthorizedKeysFile = ConfigParser.getValue("AuthorizedKeysFile");
+            string PrintMotd = ConfigParser.getValue("PrintMotd");
+            string PrintLastLog = ConfigParser.getValue("PrintLastLog");
+            string TCPKeepAlive = ConfigParser.getValue("TCPKeepAlive");
+            string Compression = ConfigParser.getValue("Compression");
+            string ClientAliveInterval = ConfigParser.getValue("ClientAliveInterval");
+            string ClientAliveCountMax = ConfigParser.getValue("ClientAliveCountMax");
+            string MaxStartups = ConfigParser.getValue("MaxStartups");
+            string Banner = ConfigParser.getValue("Banner");
+
             // TODO: Read config file and initialize the GUIs values
+            if (ListenAddress != "")
+            {
+                ServerAddressTextBox.Text = ListenAddress;
+            }
+            else
+            {
+                ServerAddressTextBox.Text = "0.0.0.0";
+            }
+            if (Port != "")
+            {
+                ServerPortNumericUpDown.Value = decimal.Parse(Port);
+            }
+            else
+            {
+                ServerPortNumericUpDown.Value = 22;
+            }
+            
+            LoginTimeNumericUpDown.Value = 120;
+            MaxAuthTriesNumericUpDown.Value = 6;
+            ConcurrentLoginsNumericUpDown.Value = 10;
+            MaxSessionsNumericUpDown.Value = 10;
+            LoginPossibleWithCertificateCheckBox.Checked = true;
+            CompressionComboBox.Text = "delayed";
+            TestIfClientIsStillReachableCheckBox.Checked = true;
+            TestConnectionOfClientEveryNumericUpDown.Value = 0;
+            PassesNumericUpDown.Value = 3;
+            MessageBeforeLoginTextBox.Text = "";
+            PrintMessageOfTheDayCheckBox.Checked = true;
+            PrintMessageOfTheDayTextBox.Text = "";
+            PrintLastLoginCheckBox.Checked = true;
         }
 
         // Save all changes into sshd_config file
@@ -89,6 +135,7 @@ namespace EasySSHd
             PrintMessageOfTheDayCheckBox.Checked = true;
             PrintMessageOfTheDayTextBox.Text = "";
             PrintLastLoginCheckBox.Checked = true;
+            this.changed = true;
         }
 
         private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
