@@ -15,7 +15,7 @@ namespace EasySSHd
     {
         private bool changed = false; // global change indicator
         private parser.parser ConfigParser = new parser.parser(); // global config-parser instance
-        
+        private RegistryKey installDirRegKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Cygnus Solutions\Cygwin\mounts v2\/", false);
         
         
         
@@ -28,18 +28,7 @@ namespace EasySSHd
         // Called on Window Load, Initialize all Values
         private void EasySSHdWindow_Load(object sender, EventArgs e)
         {
-            RegistryKey installDirRegKey = Registry.LocalMachine;
-            string installDir = "";
-            installDirRegKey = installDirRegKey.OpenSubKey(@".SOFTWARE\Cygnus Solutions\Cygwin\mount v2\/", false);
-            try
-            {
-                 installDir = installDirRegKey.GetValue("native").ToString();
-            }
-            catch (NullReferenceException)
-            {
-
-            }
-            installDirRegKey.Close();
+            string installDir = installDirRegKey.GetValue("native").ToString();
             string ListenAddress = ConfigParser.getValue("ListenAddress");
             string Port = ConfigParser.getValue("Port");
             string LoginGraceTime = ConfigParser.getValue("LoginGraceTime");
@@ -58,7 +47,7 @@ namespace EasySSHd
 
             if (ListenAddress != "")
             {
-                ServerAddressTextBox.Text = installDir;
+                ServerAddressTextBox.Text = ListenAddress;
             }
             else
             {
