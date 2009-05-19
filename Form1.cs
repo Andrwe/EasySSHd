@@ -29,6 +29,8 @@ namespace EasySSHd
         private void EasySSHdWindow_Load(object sender, EventArgs e)
         {
             string installDir = installDirRegKey.GetValue("native").ToString();
+            ConfigParser.readFile(installDir + @"\etc\sshd_config");
+
             string ListenAddress = ConfigParser.getValue("ListenAddress");
             string Port = ConfigParser.getValue("Port");
             string LoginGraceTime = ConfigParser.getValue("LoginGraceTime");
@@ -45,7 +47,7 @@ namespace EasySSHd
             string MaxStartups = ConfigParser.getValue("MaxStartups");
             string Banner = ConfigParser.getValue("Banner");
 
-            if (ListenAddress != "")
+            if (ListenAddress != "") 
             {
                 ServerAddressTextBox.Text = ListenAddress;
             }
@@ -190,8 +192,32 @@ namespace EasySSHd
         // Save all changes into sshd_config file
         private bool SaveChanges()
         {
-            // TODO: get and save changes
-            return false;
+            string installDir = installDirRegKey.GetValue("native").ToString();
+            
+            string ListenAddress = ConfigParser.getValue("ListenAddress");
+            string Port = ConfigParser.getValue("Port");
+            string LoginGraceTime = ConfigParser.getValue("LoginGraceTime");
+            string MaxAuthTries = ConfigParser.getValue("MaxAuthTries");
+            string MaxSessions = ConfigParser.getValue("MaxSessions");
+            string PubkeyAuthentication = ConfigParser.getValue("PubkeyAuthentication");
+            string AuthorizedKeysFile = ConfigParser.getValue("AuthorizedKeysFile");
+            string PrintMotd = ConfigParser.getValue("PrintMotd");
+            string PrintLastLog = ConfigParser.getValue("PrintLastLog");
+            string TCPKeepAlive = ConfigParser.getValue("TCPKeepAlive");
+            string Compression = ConfigParser.getValue("Compression");
+            string ClientAliveInterval = ConfigParser.getValue("ClientAliveInterval");
+            string ClientAliveCountMax = ConfigParser.getValue("ClientAliveCountMax");
+            string MaxStartups = ConfigParser.getValue("MaxStartups");
+            string Banner = ConfigParser.getValue("Banner");
+
+            if (!(ListenAddress == ServerAddressTextBox.Text))
+            {
+                ConfigParser.setValue("ListenAddress", ListenAddress);
+            }
+
+            ConfigParser.writeFile(installDir + @"\etc\sshd_config");
+            this.changed = false;
+            return true;
         }
 
         // Close Program and ask for saving unsaved changes
@@ -265,6 +291,11 @@ namespace EasySSHd
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void EasySSHdWindow_TextChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
         }
     }
 }

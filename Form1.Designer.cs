@@ -154,6 +154,7 @@
             this.ServerAddressTextBox.Name = "ServerAddressTextBox";
             this.ServerAddressTextBox.Size = new System.Drawing.Size(100, 22);
             this.ServerAddressTextBox.TabIndex = 4;
+            this.ServerAddressTextBox.TextChanged += new System.EventHandler(this.EasySSHdWindow_TextChanged);
             // 
             // LoginSecurityGB
             // 
@@ -622,6 +623,7 @@
             this.Name = "EasySSHdWindow";
             this.Text = "EasySSHd";
             this.Load += new System.EventHandler(this.EasySSHdWindow_Load);
+            this.TextChanged += new System.EventHandler(this.EasySSHdWindow_TextChanged);
             this.ServerConnectionGB.ResumeLayout(false);
             this.ServerConnectionGB.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ServerPortNumericUpDown)).EndInit();
