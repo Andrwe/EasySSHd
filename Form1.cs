@@ -210,9 +210,29 @@ namespace EasySSHd
             string MaxStartups = ConfigParser.getValue("MaxStartups");
             string Banner = ConfigParser.getValue("Banner");
 
-            if (!(ListenAddress == ServerAddressTextBox.Text))
+            if (!(ListenAddress == ServerAddressTextBox.Text || (ListenAddress == "" && ServerAddressTextBox.Text == "0.0.0.0")))
             {
-                ConfigParser.setValue("ListenAddress", ListenAddress);
+                ConfigParser.setValue("ListenAddress", ServerAddressTextBox.Text);
+            }
+            if (!(Port == ServerPortNumericUpDown.Value.ToString() || (Port == "" && ServerPortNumericUpDown.Value == 22)))
+            {
+                ConfigParser.setValue("Port", ServerPortNumericUpDown.Value.ToString());
+            }
+            if (!(LoginGraceTime == LoginTimeNumericUpDown.Value.ToString() || (LoginTimeNumericUpDown.Value == 120 && LoginGraceTime == "")))
+            {
+                ConfigParser.setValue("LoginGraceTime", LoginTimeNumericUpDown.Value.ToString());
+            }
+            if (!(MaxAuthTries == MaxAuthTriesNumericUpDown.Value.ToString() || (MaxAuthTriesNumericUpDown.Value == 120 && MaxAuthTries == "")))
+            {
+                ConfigParser.setValue("MaxAuthTries", MaxAuthTriesNumericUpDown.Value.ToString());
+            }
+            if (!(MaxStartups == ConcurrentLoginsNumericUpDown.Value.ToString() || (ConcurrentLoginsNumericUpDown.Value == 120 && MaxStartups == "")))
+            {
+                ConfigParser.setValue("MaxStartups", ConcurrentLoginsNumericUpDown.Value.ToString());
+            }
+            if (!(MaxSessions == MaxSessionsNumericUpDown.Value.ToString() || (MaxSessionsNumericUpDown.Value == 120 && MaxSessions == "")))
+            {
+                ConfigParser.setValue("MaxSessions", MaxSessionsNumericUpDown.Value.ToString());
             }
 
             ConfigParser.writeFile(installDir + @"\etc\sshd_config");

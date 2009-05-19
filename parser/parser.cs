@@ -139,8 +139,12 @@ namespace parser
                 if (commentPosition > -1)
                 {
                     lineComment = line.Substring(commentPosition, line.Length - 1 - commentPosition);
+                    fileContent[linePosition] = option + " " + value + " " + lineComment;
                 }
-                fileContent[linePosition] = option + " " + value + " " + lineComment;
+                else
+                {
+                    fileContent[linePosition] = option + " " + value;
+                }
             }
         }
         /*
