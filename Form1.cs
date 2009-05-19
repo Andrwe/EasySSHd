@@ -57,20 +57,130 @@ namespace EasySSHd
             {
                 ServerPortNumericUpDown.Value = 22;
             }
-            
-            LoginTimeNumericUpDown.Value = 120;
-            MaxAuthTriesNumericUpDown.Value = 6;
-            ConcurrentLoginsNumericUpDown.Value = 10;
-            MaxSessionsNumericUpDown.Value = 10;
-            LoginPossibleWithCertificateCheckBox.Checked = true;
-            CompressionComboBox.Text = "delayed";
-            TestIfClientIsStillReachableCheckBox.Checked = true;
-            TestConnectionOfClientEveryNumericUpDown.Value = 0;
-            PassesNumericUpDown.Value = 3;
-            MessageBeforeLoginTextBox.Text = "";
-            PrintMessageOfTheDayCheckBox.Checked = true;
-            PrintMessageOfTheDayTextBox.Text = "";
-            PrintLastLoginCheckBox.Checked = true;
+            if (LoginGraceTime != "")
+            {
+                LoginTimeNumericUpDown.Value = decimal.Parse(LoginGraceTime);
+            }
+            else
+            {
+                LoginTimeNumericUpDown.Value = 120;
+            }
+            if (MaxAuthTries != "")
+            {
+                MaxAuthTriesNumericUpDown.Value = decimal.Parse(MaxAuthTries);
+            }
+            else
+            {
+                MaxAuthTriesNumericUpDown.Value = 6;
+            }
+            if (MaxStartups != "")
+            {
+                ConcurrentLoginsNumericUpDown.Value = decimal.Parse(MaxStartups);
+            }
+            else
+            {
+                ConcurrentLoginsNumericUpDown.Value = 10;
+            }
+            if (MaxSessions != "")
+            {
+                MaxSessionsNumericUpDown.Value = decimal.Parse(MaxSessions);
+            }
+            else
+            {
+                MaxSessionsNumericUpDown.Value = 10;
+            }
+            if (PubkeyAuthentication != "")
+            {
+                if (PubkeyAuthentication == "yes")
+                {
+                    LoginPossibleWithCertificateCheckBox.Checked = true;
+                }
+                else
+                {
+                    LoginPossibleWithCertificateCheckBox.Checked = false;
+                }
+            }
+            else
+            {
+                LoginPossibleWithCertificateCheckBox.Checked = true;
+            }
+            if (Compression != "")
+            {
+                CompressionComboBox.Text = Compression;
+            }
+            else
+            {
+                CompressionComboBox.Text = "delayed";
+            }
+            if (TCPKeepAlive != "")
+            {
+                if (TCPKeepAlive == "yes")
+                {
+                    TestIfClientIsStillReachableCheckBox.Checked = true;
+                }
+                else
+                {
+                    TestIfClientIsStillReachableCheckBox.Checked = false;
+                }
+            }
+            else
+            {
+                TestIfClientIsStillReachableCheckBox.Checked = true;
+            }
+            if (ClientAliveInterval != "")
+            {
+                TestConnectionOfClientEveryNumericUpDown.Value = decimal.Parse(ClientAliveInterval);
+            }
+            else
+            {
+                TestConnectionOfClientEveryNumericUpDown.Value = 0;
+            }
+            if (ClientAliveCountMax != "")
+            {
+                PassesNumericUpDown.Value = decimal.Parse(ClientAliveCountMax);
+            }
+            else
+            {
+                PassesNumericUpDown.Value = 3;
+            }
+            if (Banner != "")
+            {
+                MessageBeforeLoginTextBox.Text = Banner;
+            }
+            else
+            {
+                MessageBeforeLoginTextBox.Text = "";
+            }
+            if (PrintMotd != "")
+            {
+                if (PrintMotd == "yes")
+                {
+                    PrintMessageOfTheDayCheckBox.Checked = true;
+                }
+                else
+                {
+                    PrintMessageOfTheDayCheckBox.Checked = false;
+                }
+            }
+            else
+            {
+                PrintMessageOfTheDayCheckBox.Checked = true;
+            }
+            if (PrintLastLog != "")
+            {
+                if (PrintLastLog == "yes")
+                {
+                    PrintLastLoginCheckBox.Checked = true;
+                }
+                else
+                {
+                    PrintLastLoginCheckBox.Checked = false;
+                }
+            }
+            else
+            {
+                PrintLastLoginCheckBox.Checked = true;
+            }
         }
 
         // Save all changes into sshd_config file

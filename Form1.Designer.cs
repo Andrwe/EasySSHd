@@ -44,14 +44,19 @@
             this.LoginTimeLabel = new System.Windows.Forms.Label();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.SSLTabPage = new System.Windows.Forms.TabPage();
+            this.BrowseButton = new System.Windows.Forms.Button();
+            this.PathToCertificateTextBox = new System.Windows.Forms.TextBox();
             this.PathToCertificateLabel = new System.Windows.Forms.Label();
             this.LoginPossibleWithCertificateCheckBox = new System.Windows.Forms.CheckBox();
             this.CompressionTabPage = new System.Windows.Forms.TabPage();
+            this.CompressionComboBox = new System.Windows.Forms.ComboBox();
             this.CheckingTabPage = new System.Windows.Forms.TabPage();
+            this.OptionTwoGroupBox = new System.Windows.Forms.GroupBox();
             this.PassesNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.PassesLabel = new System.Windows.Forms.Label();
-            this.TestConnectionOfClientEveryLabel = new System.Windows.Forms.Label();
             this.TestConnectionOfClientEveryNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.TestConnectionOfClientEveryLabel = new System.Windows.Forms.Label();
+            this.OptionOneGroupBox = new System.Windows.Forms.GroupBox();
             this.TestIfClientIsStillReachableCheckBox = new System.Windows.Forms.CheckBox();
             this.InfoTabPage = new System.Windows.Forms.TabPage();
             this.PrintMessageOfTheDayTextBox = new System.Windows.Forms.TextBox();
@@ -66,11 +71,6 @@
             this.StopButton = new System.Windows.Forms.Button();
             this.HelpLinkLabel = new System.Windows.Forms.LinkLabel();
             this.DefaultsButton = new System.Windows.Forms.Button();
-            this.PathToCertificateTextBox = new System.Windows.Forms.TextBox();
-            this.BrowseButton = new System.Windows.Forms.Button();
-            this.CompressionComboBox = new System.Windows.Forms.ComboBox();
-            this.OptionOneGroupBox = new System.Windows.Forms.GroupBox();
-            this.OptionTwoGroupBox = new System.Windows.Forms.GroupBox();
             this.ServerConnectionGB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ServerPortNumericUpDown)).BeginInit();
             this.LoginSecurityGB.SuspendLayout();
@@ -82,11 +82,11 @@
             this.SSLTabPage.SuspendLayout();
             this.CompressionTabPage.SuspendLayout();
             this.CheckingTabPage.SuspendLayout();
+            this.OptionTwoGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PassesNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TestConnectionOfClientEveryNumericUpDown)).BeginInit();
-            this.InfoTabPage.SuspendLayout();
             this.OptionOneGroupBox.SuspendLayout();
-            this.OptionTwoGroupBox.SuspendLayout();
+            this.InfoTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // ServerAdressLabel
@@ -143,7 +143,7 @@
             this.ServerPortNumericUpDown.Size = new System.Drawing.Size(100, 22);
             this.ServerPortNumericUpDown.TabIndex = 5;
             this.ServerPortNumericUpDown.Value = new decimal(new int[] {
-            22,
+            25,
             0,
             0,
             0});
@@ -154,7 +154,6 @@
             this.ServerAddressTextBox.Name = "ServerAddressTextBox";
             this.ServerAddressTextBox.Size = new System.Drawing.Size(100, 22);
             this.ServerAddressTextBox.TabIndex = 4;
-            this.ServerAddressTextBox.Text = "0.0.0.0";
             // 
             // LoginSecurityGB
             // 
@@ -315,6 +314,22 @@
             this.SSLTabPage.Text = "SSL";
             this.SSLTabPage.ToolTipText = "options regarding SSL";
             // 
+            // BrowseButton
+            // 
+            this.BrowseButton.Location = new System.Drawing.Point(436, 78);
+            this.BrowseButton.Name = "BrowseButton";
+            this.BrowseButton.Size = new System.Drawing.Size(63, 23);
+            this.BrowseButton.TabIndex = 4;
+            this.BrowseButton.Text = "Browse";
+            this.BrowseButton.UseVisualStyleBackColor = true;
+            // 
+            // PathToCertificateTextBox
+            // 
+            this.PathToCertificateTextBox.Location = new System.Drawing.Point(21, 78);
+            this.PathToCertificateTextBox.Name = "PathToCertificateTextBox";
+            this.PathToCertificateTextBox.Size = new System.Drawing.Size(409, 22);
+            this.PathToCertificateTextBox.TabIndex = 3;
+            // 
             // PathToCertificateLabel
             // 
             this.PathToCertificateLabel.AutoSize = true;
@@ -348,6 +363,19 @@
             this.CompressionTabPage.Text = "Compression";
             this.CompressionTabPage.ToolTipText = "activate or deactivate compression";
             // 
+            // CompressionComboBox
+            // 
+            this.CompressionComboBox.FormattingEnabled = true;
+            this.CompressionComboBox.Items.AddRange(new object[] {
+            "on",
+            "off",
+            "delayed"});
+            this.CompressionComboBox.Location = new System.Drawing.Point(31, 25);
+            this.CompressionComboBox.Name = "CompressionComboBox";
+            this.CompressionComboBox.Size = new System.Drawing.Size(76, 24);
+            this.CompressionComboBox.TabIndex = 0;
+            this.CompressionComboBox.Text = "yes";
+            // 
             // CheckingTabPage
             // 
             this.CheckingTabPage.BackColor = System.Drawing.SystemColors.Control;
@@ -359,6 +387,19 @@
             this.CheckingTabPage.TabIndex = 2;
             this.CheckingTabPage.Text = "Checking";
             this.CheckingTabPage.ToolTipText = "connection testing and controling";
+            // 
+            // OptionTwoGroupBox
+            // 
+            this.OptionTwoGroupBox.Controls.Add(this.PassesNumericUpDown);
+            this.OptionTwoGroupBox.Controls.Add(this.PassesLabel);
+            this.OptionTwoGroupBox.Controls.Add(this.TestConnectionOfClientEveryNumericUpDown);
+            this.OptionTwoGroupBox.Controls.Add(this.TestConnectionOfClientEveryLabel);
+            this.OptionTwoGroupBox.Location = new System.Drawing.Point(17, 60);
+            this.OptionTwoGroupBox.Name = "OptionTwoGroupBox";
+            this.OptionTwoGroupBox.Size = new System.Drawing.Size(482, 68);
+            this.OptionTwoGroupBox.TabIndex = 6;
+            this.OptionTwoGroupBox.TabStop = false;
+            this.OptionTwoGroupBox.Text = "Option 2";
             // 
             // PassesNumericUpDown
             // 
@@ -386,15 +427,6 @@
             this.PassesLabel.TabIndex = 3;
             this.PassesLabel.Text = "Passes";
             // 
-            // TestConnectionOfClientEveryLabel
-            // 
-            this.TestConnectionOfClientEveryLabel.AutoSize = true;
-            this.TestConnectionOfClientEveryLabel.Location = new System.Drawing.Point(11, 18);
-            this.TestConnectionOfClientEveryLabel.Name = "TestConnectionOfClientEveryLabel";
-            this.TestConnectionOfClientEveryLabel.Size = new System.Drawing.Size(222, 16);
-            this.TestConnectionOfClientEveryLabel.TabIndex = 2;
-            this.TestConnectionOfClientEveryLabel.Text = "Test connection of Client every (sec.)";
-            // 
             // TestConnectionOfClientEveryNumericUpDown
             // 
             this.TestConnectionOfClientEveryNumericUpDown.Location = new System.Drawing.Point(14, 39);
@@ -406,6 +438,25 @@
             this.TestConnectionOfClientEveryNumericUpDown.Name = "TestConnectionOfClientEveryNumericUpDown";
             this.TestConnectionOfClientEveryNumericUpDown.Size = new System.Drawing.Size(219, 22);
             this.TestConnectionOfClientEveryNumericUpDown.TabIndex = 1;
+            // 
+            // TestConnectionOfClientEveryLabel
+            // 
+            this.TestConnectionOfClientEveryLabel.AutoSize = true;
+            this.TestConnectionOfClientEveryLabel.Location = new System.Drawing.Point(11, 18);
+            this.TestConnectionOfClientEveryLabel.Name = "TestConnectionOfClientEveryLabel";
+            this.TestConnectionOfClientEveryLabel.Size = new System.Drawing.Size(222, 16);
+            this.TestConnectionOfClientEveryLabel.TabIndex = 2;
+            this.TestConnectionOfClientEveryLabel.Text = "Test connection of Client every (sec.)";
+            // 
+            // OptionOneGroupBox
+            // 
+            this.OptionOneGroupBox.Controls.Add(this.TestIfClientIsStillReachableCheckBox);
+            this.OptionOneGroupBox.Location = new System.Drawing.Point(17, 3);
+            this.OptionOneGroupBox.Name = "OptionOneGroupBox";
+            this.OptionOneGroupBox.Size = new System.Drawing.Size(482, 51);
+            this.OptionOneGroupBox.TabIndex = 5;
+            this.OptionOneGroupBox.TabStop = false;
+            this.OptionOneGroupBox.Text = "Option 1";
             // 
             // TestIfClientIsStillReachableCheckBox
             // 
@@ -429,7 +480,7 @@
             this.InfoTabPage.Controls.Add(this.MessageBeforeLoginTextBox);
             this.InfoTabPage.Location = new System.Drawing.Point(4, 25);
             this.InfoTabPage.Name = "InfoTabPage";
-            this.InfoTabPage.Size = new System.Drawing.Size(522, 128);
+            this.InfoTabPage.Size = new System.Drawing.Size(522, 139);
             this.InfoTabPage.TabIndex = 3;
             this.InfoTabPage.Text = "Info";
             this.InfoTabPage.ToolTipText = "information printed before or after login";
@@ -551,58 +602,6 @@
             this.DefaultsButton.UseVisualStyleBackColor = true;
             this.DefaultsButton.Click += new System.EventHandler(this.DefaultsButton_Click);
             // 
-            // PathToCertificateTextBox
-            // 
-            this.PathToCertificateTextBox.Location = new System.Drawing.Point(21, 78);
-            this.PathToCertificateTextBox.Name = "PathToCertificateTextBox";
-            this.PathToCertificateTextBox.Size = new System.Drawing.Size(409, 22);
-            this.PathToCertificateTextBox.TabIndex = 3;
-            // 
-            // BrowseButton
-            // 
-            this.BrowseButton.Location = new System.Drawing.Point(436, 78);
-            this.BrowseButton.Name = "BrowseButton";
-            this.BrowseButton.Size = new System.Drawing.Size(63, 23);
-            this.BrowseButton.TabIndex = 4;
-            this.BrowseButton.Text = "Browse";
-            this.BrowseButton.UseVisualStyleBackColor = true;
-            // 
-            // CompressionComboBox
-            // 
-            this.CompressionComboBox.FormattingEnabled = true;
-            this.CompressionComboBox.Items.AddRange(new object[] {
-            "on",
-            "off",
-            "delayed"});
-            this.CompressionComboBox.Location = new System.Drawing.Point(31, 25);
-            this.CompressionComboBox.Name = "CompressionComboBox";
-            this.CompressionComboBox.Size = new System.Drawing.Size(76, 24);
-            this.CompressionComboBox.TabIndex = 0;
-            this.CompressionComboBox.Text = "delayed";
-            // 
-            // OptionOneGroupBox
-            // 
-            this.OptionOneGroupBox.Controls.Add(this.TestIfClientIsStillReachableCheckBox);
-            this.OptionOneGroupBox.Location = new System.Drawing.Point(17, 3);
-            this.OptionOneGroupBox.Name = "OptionOneGroupBox";
-            this.OptionOneGroupBox.Size = new System.Drawing.Size(482, 51);
-            this.OptionOneGroupBox.TabIndex = 5;
-            this.OptionOneGroupBox.TabStop = false;
-            this.OptionOneGroupBox.Text = "Option 1";
-            // 
-            // OptionTwoGroupBox
-            // 
-            this.OptionTwoGroupBox.Controls.Add(this.PassesNumericUpDown);
-            this.OptionTwoGroupBox.Controls.Add(this.PassesLabel);
-            this.OptionTwoGroupBox.Controls.Add(this.TestConnectionOfClientEveryNumericUpDown);
-            this.OptionTwoGroupBox.Controls.Add(this.TestConnectionOfClientEveryLabel);
-            this.OptionTwoGroupBox.Location = new System.Drawing.Point(17, 60);
-            this.OptionTwoGroupBox.Name = "OptionTwoGroupBox";
-            this.OptionTwoGroupBox.Size = new System.Drawing.Size(482, 68);
-            this.OptionTwoGroupBox.TabIndex = 6;
-            this.OptionTwoGroupBox.TabStop = false;
-            this.OptionTwoGroupBox.Text = "Option 2";
-            // 
             // EasySSHdWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -637,14 +636,14 @@
             this.SSLTabPage.PerformLayout();
             this.CompressionTabPage.ResumeLayout(false);
             this.CheckingTabPage.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.PassesNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TestConnectionOfClientEveryNumericUpDown)).EndInit();
-            this.InfoTabPage.ResumeLayout(false);
-            this.InfoTabPage.PerformLayout();
-            this.OptionOneGroupBox.ResumeLayout(false);
-            this.OptionOneGroupBox.PerformLayout();
             this.OptionTwoGroupBox.ResumeLayout(false);
             this.OptionTwoGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PassesNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TestConnectionOfClientEveryNumericUpDown)).EndInit();
+            this.OptionOneGroupBox.ResumeLayout(false);
+            this.OptionOneGroupBox.PerformLayout();
+            this.InfoTabPage.ResumeLayout(false);
+            this.InfoTabPage.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
