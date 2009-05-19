@@ -222,15 +222,15 @@ namespace EasySSHd
             {
                 ConfigParser.setValue("LoginGraceTime", LoginTimeNumericUpDown.Value.ToString());
             }
-            if (!(MaxAuthTries == MaxAuthTriesNumericUpDown.Value.ToString() || (MaxAuthTriesNumericUpDown.Value == 120 && MaxAuthTries == "")))
+            if (!(MaxAuthTries == MaxAuthTriesNumericUpDown.Value.ToString() || (MaxAuthTriesNumericUpDown.Value == 6 && MaxAuthTries == "")))
             {
                 ConfigParser.setValue("MaxAuthTries", MaxAuthTriesNumericUpDown.Value.ToString());
             }
-            if (!(MaxStartups == ConcurrentLoginsNumericUpDown.Value.ToString() || (ConcurrentLoginsNumericUpDown.Value == 120 && MaxStartups == "")))
+            if (!(MaxStartups == ConcurrentLoginsNumericUpDown.Value.ToString() || (ConcurrentLoginsNumericUpDown.Value == 10 && MaxStartups == "")))
             {
                 ConfigParser.setValue("MaxStartups", ConcurrentLoginsNumericUpDown.Value.ToString());
             }
-            if (!(MaxSessions == MaxSessionsNumericUpDown.Value.ToString() || (MaxSessionsNumericUpDown.Value == 120 && MaxSessions == "")))
+            if (!(MaxSessions == MaxSessionsNumericUpDown.Value.ToString() || (MaxSessionsNumericUpDown.Value == 10 && MaxSessions == "")))
             {
                 ConfigParser.setValue("MaxSessions", MaxSessionsNumericUpDown.Value.ToString());
             }
