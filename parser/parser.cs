@@ -134,16 +134,23 @@ namespace parser
                 string lineComment = "";
                 int commentPosition;
                 linePosition = searchLine(option);
-                line = fileContent[linePosition].ToString();
-                commentPosition = line.IndexOf('#');
-                if (commentPosition > -1)
+                if (linePosition > -1)
                 {
-                    lineComment = line.Substring(commentPosition, line.Length - 1 - commentPosition);
-                    fileContent[linePosition] = option + " " + value + " " + lineComment;
+                    line = fileContent[linePosition].ToString();
+                    commentPosition = line.IndexOf('#');
+                    if (commentPosition > -1)
+                    {
+                        lineComment = line.Substring(commentPosition, line.Length - 1 - commentPosition);
+                        fileContent[linePosition] = option + " " + value + " " + lineComment;
+                    }
+                    else
+                    {
+                        fileContent[linePosition] = option + " " + value;
+                    }
                 }
                 else
                 {
-                    fileContent[linePosition] = option + " " + value;
+                    fileContent.Add(option + " " + value);
                 }
             }
         }
