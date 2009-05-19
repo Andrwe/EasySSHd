@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 using Microsoft.Win32;
 using parser;
 
@@ -16,6 +17,7 @@ namespace EasySSHd
         private bool changed = false; // global change indicator
         private parser.parser ConfigParser = new parser.parser(); // global config-parser instance
         private RegistryKey installDirRegKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Cygnus Solutions\Cygwin\mounts v2\/", false);
+        private ArrayList plainFileContent = new ArrayList();
         
         
         
@@ -30,6 +32,30 @@ namespace EasySSHd
         {
             string installDir = installDirRegKey.GetValue("native").ToString();
             ConfigParser.readFile(installDir + @"\etc\sshd_config");
+            string motdFile = installDir + @"\etc\motd";
+
+            try
+            {
+                this.readPlainFile(motdFile);
+            }
+            catch (FileNotFoundException)
+            {
+                if (MessageBox.Show("The file for 'Message of the day' does not exist. Do you want to create an empty one?", "EasySSHd", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+                {
+                    try
+                    {
+                        this.writePlainFile(motdFile, "");
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        MessageBox.Show("The file for 'Message of the day' is not writeable. Please check the permissions.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show("The file for 'Message of the day' is not readable. Please check the permissions.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             string ListenAddress = ConfigParser.getValue("ListenAddress");
             string Port = ConfigParser.getValue("Port");
@@ -38,7 +64,7 @@ namespace EasySSHd
             string MaxSessions = ConfigParser.getValue("MaxSessions");
             string PubkeyAuthentication = ConfigParser.getValue("PubkeyAuthentication");
             string AuthorizedKeysFile = ConfigParser.getValue("AuthorizedKeysFile");
-            string PrintMotd = ConfigParser.getValue("PrintMotd");
+            string PrintMotd = ConfigParser.getValue("PrintMotd");            
             string PrintLastLog = ConfigParser.getValue("PrintLastLog");
             string TCPKeepAlive = ConfigParser.getValue("TCPKeepAlive");
             string Compression = ConfigParser.getValue("Compression");
@@ -172,6 +198,17 @@ namespace EasySSHd
             {
                 PrintMessageOfTheDayCheckBox.Checked = true;
             }
+            if (!plainFileContent.Contains(null))
+            {
+                foreach (string line in plainFileContent)
+                {
+                    PrintMessageOfTheDayTextBox.Text += line + "\r\n";
+                }
+            }
+            else
+            {
+                PrintMessageOfTheDayTextBox.Text = "";
+            }
             if (PrintLastLog != "")
             {
                 if (PrintLastLog == "yes")
@@ -187,13 +224,38 @@ namespace EasySSHd
             {
                 PrintLastLoginCheckBox.Checked = true;
             }
+            this.changed = false;
         }
 
         // Save all changes into sshd_config file
         private bool SaveChanges()
         {
             string installDir = installDirRegKey.GetValue("native").ToString();
-            
+            string motdFile = installDir + @"\etc\motd";
+
+            try
+            {
+                this.readPlainFile(motdFile);
+            }
+            catch (FileNotFoundException)
+            {
+                if (MessageBox.Show("The file for 'Message of the day' does not exist. Do you want to create an empty one?", "EasySSHd", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+                {
+                    try
+                    {
+                        this.writePlainFile(motdFile, "");
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        MessageBox.Show("The file for 'Message of the day' is not writeable. Please check the permissions.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show("The file for 'Message of the day' is not readable. Please check the permissions.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             string ListenAddress = ConfigParser.getValue("ListenAddress");
             string Port = ConfigParser.getValue("Port");
             string LoginGraceTime = ConfigParser.getValue("LoginGraceTime");
@@ -233,6 +295,22 @@ namespace EasySSHd
             if (!(MaxSessions == MaxSessionsNumericUpDown.Value.ToString() || (MaxSessionsNumericUpDown.Value == 10 && MaxSessions == "")))
             {
                 ConfigParser.setValue("MaxSessions", MaxSessionsNumericUpDown.Value.ToString());
+            }
+            if (!(PubkeyAuthentication == LoginPossibleWithCertificateCheckBox.Checked.ToString() || (LoginPossibleWithCertificateCheckBox.Checked == true && PubkeyAuthentication == "yes")))
+            {
+                //ConfigParser.setValue("PubkeyAuthentication", LoginPossibleWithCertificateCheckBox.Checked.ToString());
+            }
+            if (!(AuthorizedKeysFile == PathToCertificateTextBox.Text || (PathToCertificateTextBox.Text == "" && AuthorizedKeysFile == "")))
+            {
+                ConfigParser.setValue("AuthorizedKeysFile", PathToCertificateTextBox.Text);
+            }
+            if (!(PrintMotd == PrintMessageOfTheDayCheckBox.Checked.ToString() || (PrintMessageOfTheDayCheckBox.Checked == true && PrintMotd == "yes")))
+            {
+                //ConfigParser.setValue("PrintMotd", PrintMessageOfTheDayCheckBox.Checked.ToString());
+            }
+            if (!(plainFileContent.ToString() == PrintMessageOfTheDayTextBox.Text))
+            {
+                this.writePlainFile(motdFile, PrintMessageOfTheDayTextBox.Text);
             }
 
             ConfigParser.writeFile(installDir + @"\etc\sshd_config");
@@ -316,6 +394,32 @@ namespace EasySSHd
         private void EasySSHdWindow_TextChanged(object sender, EventArgs e)
         {
             this.changed = true;
+        }
+
+        private void PrintMessageOfTheDayTextBox_TextChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
+        }
+        
+
+        private void readPlainFile(string file)
+        {
+            string fileLine = "";
+            StreamReader fileStr = new StreamReader(file);
+            
+            while (fileLine != null)
+            {
+                fileLine = fileStr.ReadLine();
+                if (fileLine != null)
+                    plainFileContent.Add(fileLine);
+            }
+            fileStr.Close();
+        }
+        private void writePlainFile(string file, string value)
+        {
+            StreamWriter fileStr = new StreamWriter(file);
+            fileStr.WriteLine(value);
+            fileStr.Close();
         }
     }
 }

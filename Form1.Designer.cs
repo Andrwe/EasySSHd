@@ -493,6 +493,7 @@
             this.PrintMessageOfTheDayTextBox.Name = "PrintMessageOfTheDayTextBox";
             this.PrintMessageOfTheDayTextBox.Size = new System.Drawing.Size(210, 50);
             this.PrintMessageOfTheDayTextBox.TabIndex = 4;
+            this.PrintMessageOfTheDayTextBox.TextChanged += new System.EventHandler(this.PrintMessageOfTheDayTextBox_TextChanged);
             // 
             // PrintLastLoginCheckBox
             // 
