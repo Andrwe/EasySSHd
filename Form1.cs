@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Microsoft.Win32;
 using parser;
 
 namespace EasySSHd
@@ -14,7 +15,10 @@ namespace EasySSHd
     {
         private bool changed = false; // global change indicator
         private parser.parser ConfigParser = new parser.parser(); // global config-parser instance
-
+        
+        
+        
+        
         // Constructor
         public EasySSHdWindow()
         {
@@ -24,6 +28,18 @@ namespace EasySSHd
         // Called on Window Load, Initialize all Values
         private void EasySSHdWindow_Load(object sender, EventArgs e)
         {
+            RegistryKey installDirRegKey = Registry.LocalMachine;
+            string installDir = "";
+            installDirRegKey = installDirRegKey.OpenSubKey(@".SOFTWARE\Cygnus Solutions\Cygwin\mount v2\/", false);
+            try
+            {
+                 installDir = installDirRegKey.GetValue("native").ToString();
+            }
+            catch (NullReferenceException)
+            {
+
+            }
+            installDirRegKey.Close();
             string ListenAddress = ConfigParser.getValue("ListenAddress");
             string Port = ConfigParser.getValue("Port");
             string LoginGraceTime = ConfigParser.getValue("LoginGraceTime");
@@ -40,10 +56,9 @@ namespace EasySSHd
             string MaxStartups = ConfigParser.getValue("MaxStartups");
             string Banner = ConfigParser.getValue("Banner");
 
-            // TODO: Read config file and initialize the GUIs values
             if (ListenAddress != "")
             {
-                ServerAddressTextBox.Text = ListenAddress;
+                ServerAddressTextBox.Text = installDir;
             }
             else
             {
