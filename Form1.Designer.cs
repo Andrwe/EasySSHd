@@ -66,11 +66,12 @@
             this.MessageBeforeLoginTextBox = new System.Windows.Forms.TextBox();
             this.LoggingBox = new System.Windows.Forms.TextBox();
             this.ApplyButton = new System.Windows.Forms.Button();
-            this.CancelButton = new System.Windows.Forms.Button();
+            this.quitButton = new System.Windows.Forms.Button();
             this.StartButton = new System.Windows.Forms.Button();
             this.StopButton = new System.Windows.Forms.Button();
             this.HelpLinkLabel = new System.Windows.Forms.LinkLabel();
             this.DefaultsButton = new System.Windows.Forms.Button();
+            this.openCertificate = new System.Windows.Forms.OpenFileDialog();
             this.ServerConnectionGB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ServerPortNumericUpDown)).BeginInit();
             this.LoginSecurityGB.SuspendLayout();
@@ -147,6 +148,7 @@
             0,
             0,
             0});
+            this.ServerPortNumericUpDown.ValueChanged += new System.EventHandler(this.ServerPortNumericUpDown_ValueChanged);
             // 
             // ServerAddressTextBox
             // 
@@ -191,6 +193,7 @@
             0,
             0,
             0});
+            this.ConcurrentLoginsNumericUpDown.ValueChanged += new System.EventHandler(this.ConcurrentLoginsNumericUpDown_ValueChanged);
             // 
             // ConcurrentLoginsLabel
             // 
@@ -219,6 +222,7 @@
             0,
             0,
             0});
+            this.MaxSessionsNumericUpDown.ValueChanged += new System.EventHandler(this.MaxSessionsNumericUpDown_ValueChanged);
             // 
             // MaxAuthTriesNumericUpDown
             // 
@@ -236,6 +240,7 @@
             0,
             0,
             0});
+            this.MaxAuthTriesNumericUpDown.ValueChanged += new System.EventHandler(this.MaxAuthTriesNumericUpDown_ValueChanged);
             // 
             // LoginTimeNumericUpDown
             // 
@@ -253,6 +258,7 @@
             0,
             0,
             0});
+            this.LoginTimeNumericUpDown.ValueChanged += new System.EventHandler(this.LoginTimeNumericUpDown_ValueChanged);
             // 
             // MaxSessionsLabel
             // 
@@ -338,9 +344,9 @@
             this.PathToCertificateLabel.AutoSize = true;
             this.PathToCertificateLabel.Location = new System.Drawing.Point(18, 58);
             this.PathToCertificateLabel.Name = "PathToCertificateLabel";
-            this.PathToCertificateLabel.Size = new System.Drawing.Size(112, 16);
+            this.PathToCertificateLabel.Size = new System.Drawing.Size(206, 16);
             this.PathToCertificateLabel.TabIndex = 2;
-            this.PathToCertificateLabel.Text = "Path to Certificate";
+            this.PathToCertificateLabel.Text = "Path to Certificate (view of cygwin)";
             // 
             // LoginPossibleWithCertificateCheckBox
             // 
@@ -379,6 +385,7 @@
             this.CompressionComboBox.Size = new System.Drawing.Size(76, 24);
             this.CompressionComboBox.TabIndex = 0;
             this.CompressionComboBox.Text = "yes";
+            this.CompressionComboBox.SelectedIndexChanged += new System.EventHandler(this.CompressionComboBox_SelectedIndexChanged);
             // 
             // CheckingTabPage
             // 
@@ -421,6 +428,7 @@
             0,
             0,
             0});
+            this.PassesNumericUpDown.ValueChanged += new System.EventHandler(this.PassesNumericUpDown_ValueChanged);
             // 
             // PassesLabel
             // 
@@ -442,6 +450,7 @@
             this.TestConnectionOfClientEveryNumericUpDown.Name = "TestConnectionOfClientEveryNumericUpDown";
             this.TestConnectionOfClientEveryNumericUpDown.Size = new System.Drawing.Size(219, 22);
             this.TestConnectionOfClientEveryNumericUpDown.TabIndex = 1;
+            this.TestConnectionOfClientEveryNumericUpDown.ValueChanged += new System.EventHandler(this.TestConnectionOfClientEveryNumericUpDown_ValueChanged);
             // 
             // TestConnectionOfClientEveryLabel
             // 
@@ -473,6 +482,7 @@
             this.TestIfClientIsStillReachableCheckBox.TabIndex = 0;
             this.TestIfClientIsStillReachableCheckBox.Text = "Test if client is still reachable";
             this.TestIfClientIsStillReachableCheckBox.UseVisualStyleBackColor = true;
+            this.TestIfClientIsStillReachableCheckBox.CheckedChanged += new System.EventHandler(this.TestIfClientIsStillReachableCheckBox_CheckedChanged);
             // 
             // InfoTabPage
             // 
@@ -509,6 +519,7 @@
             this.PrintLastLoginCheckBox.TabIndex = 3;
             this.PrintLastLoginCheckBox.Text = "Print last login";
             this.PrintLastLoginCheckBox.UseVisualStyleBackColor = true;
+            this.PrintLastLoginCheckBox.CheckedChanged += new System.EventHandler(this.PrintLastLoginCheckBox_CheckedChanged);
             // 
             // PrintMessageOfTheDayCheckBox
             // 
@@ -521,6 +532,7 @@
             this.PrintMessageOfTheDayCheckBox.TabIndex = 2;
             this.PrintMessageOfTheDayCheckBox.Text = "Print Message of the day (Motd)";
             this.PrintMessageOfTheDayCheckBox.UseVisualStyleBackColor = true;
+            this.PrintMessageOfTheDayCheckBox.CheckedChanged += new System.EventHandler(this.PrintMessageOfTheDayCheckBox_CheckedChanged);
             // 
             // MessageBeforeLoginLabel
             // 
@@ -538,6 +550,7 @@
             this.MessageBeforeLoginTextBox.Name = "MessageBeforeLoginTextBox";
             this.MessageBeforeLoginTextBox.Size = new System.Drawing.Size(206, 50);
             this.MessageBeforeLoginTextBox.TabIndex = 0;
+            this.MessageBeforeLoginTextBox.TextChanged += new System.EventHandler(this.MessageBeforeLoginTextBox_TextChanged);
             // 
             // LoggingBox
             // 
@@ -559,15 +572,16 @@
             this.ApplyButton.UseVisualStyleBackColor = true;
             this.ApplyButton.Click += new System.EventHandler(this.ApplyButton_Click);
             // 
-            // CancelButton
+            // quitButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(481, 428);
-            this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(75, 23);
-            this.CancelButton.TabIndex = 10;
-            this.CancelButton.Text = "Cancel";
-            this.CancelButton.UseVisualStyleBackColor = true;
-            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            this.quitButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.quitButton.Location = new System.Drawing.Point(481, 428);
+            this.quitButton.Name = "quitButton";
+            this.quitButton.Size = new System.Drawing.Size(75, 23);
+            this.quitButton.TabIndex = 10;
+            this.quitButton.Text = "Quit";
+            this.quitButton.UseVisualStyleBackColor = true;
+            this.quitButton.Click += new System.EventHandler(this.quitButton_Click);
             // 
             // StartButton
             // 
@@ -577,6 +591,7 @@
             this.StartButton.TabIndex = 11;
             this.StartButton.Text = "Start";
             this.StartButton.UseVisualStyleBackColor = true;
+            this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
             // 
             // StopButton
             // 
@@ -607,17 +622,22 @@
             this.DefaultsButton.UseVisualStyleBackColor = true;
             this.DefaultsButton.Click += new System.EventHandler(this.DefaultsButton_Click);
             // 
+            // openCertificate
+            // 
+            this.openCertificate.AddExtension = false;
+            // 
             // EasySSHdWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
+            this.CancelButton = this.quitButton;
             this.ClientSize = new System.Drawing.Size(584, 464);
             this.Controls.Add(this.DefaultsButton);
             this.Controls.Add(this.HelpLinkLabel);
             this.Controls.Add(this.StopButton);
             this.Controls.Add(this.StartButton);
-            this.Controls.Add(this.CancelButton);
+            this.Controls.Add(this.quitButton);
             this.Controls.Add(this.ApplyButton);
             this.Controls.Add(this.LoggingBox);
             this.Controls.Add(this.TabControl);
@@ -668,7 +688,7 @@
         private System.Windows.Forms.TabPage CompressionTabPage;
         private System.Windows.Forms.TextBox LoggingBox;
         private System.Windows.Forms.Button ApplyButton;
-        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button quitButton;
         private System.Windows.Forms.Label MaxSessionsLabel;
         private System.Windows.Forms.Button StartButton;
         private System.Windows.Forms.Button StopButton;
@@ -700,6 +720,7 @@
         private System.Windows.Forms.ComboBox CompressionComboBox;
         private System.Windows.Forms.GroupBox OptionTwoGroupBox;
         private System.Windows.Forms.GroupBox OptionOneGroupBox;
+        private System.Windows.Forms.OpenFileDialog openCertificate;
     }
 }
 

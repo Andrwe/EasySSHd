@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.ServiceProcess;
 using System.Windows.Forms;
 using System.IO;
 using Microsoft.Win32;
@@ -18,8 +19,8 @@ namespace EasySSHd
         private parser.parser ConfigParser = new parser.parser(); // global config-parser instance
         private RegistryKey installDirRegKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Cygnus Solutions\Cygwin\mounts v2\/", false);
         private ArrayList plainFileContent = new ArrayList();
-        
-        
+        ServiceController sshd = new ServiceController("sshd");
+                
         
         // Constructor
         public EasySSHdWindow()
@@ -177,7 +178,7 @@ namespace EasySSHd
             }
             if (Banner != "")
             {
-                MessageBeforeLoginTextBox.Text = Banner;
+                MessageBeforeLoginTextBox.Text = Banner.Replace(@"\r\n", "\r\n");
             }
             else
             {
@@ -237,27 +238,9 @@ namespace EasySSHd
             {
                 this.readPlainFile(motdFile);
             }
-            catch (FileNotFoundException)
-            {
-                if (MessageBox.Show("The file for 'Message of the day' does not exist. Do you want to create an empty one?", "EasySSHd", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
-                {
-                    try
-                    {
-                        this.writePlainFile(motdFile, "");
-                    }
-                    catch (UnauthorizedAccessException)
-                    {
-                        MessageBox.Show("The file for 'Message of the day' is not writeable. Please check the permissions.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                else
-                {
-                    plainFileContent.Add("");
-                }
-            }
             catch (UnauthorizedAccessException)
             {
-                MessageBox.Show("The file for 'Message of the day' is not readable. Please check the permissions.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("The file for 'Message of the day' is not accessable. Please check the permissions.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             string ListenAddress = ConfigParser.getValue("ListenAddress");
@@ -300,29 +283,61 @@ namespace EasySSHd
             {
                 ConfigParser.setValue("MaxSessions", MaxSessionsNumericUpDown.Value.ToString());
             }
-            if (!(PubkeyAuthentication == LoginPossibleWithCertificateCheckBox.Checked.ToString() || (LoginPossibleWithCertificateCheckBox.Checked == true && PubkeyAuthentication == "yes")))
+            if (!((LoginPossibleWithCertificateCheckBox.Checked == false && PubkeyAuthentication == "no") ||
+                (LoginPossibleWithCertificateCheckBox.Checked == true && PubkeyAuthentication == "yes")))
             {
-                ConfigParser.setValue("PubkeyAuthentication", LoginPossibleWithCertificateCheckBox.Checked.ToString());
+                if (LoginPossibleWithCertificateCheckBox.Checked == true)
+                {
+                    ConfigParser.setValue("PubkeyAuthentication", "yes");
+                }
+                else
+                {
+                    ConfigParser.setValue("PubkeyAuthentication", "no");
+                }
             }
             if (!(AuthorizedKeysFile == PathToCertificateTextBox.Text || (PathToCertificateTextBox.Text == "" && AuthorizedKeysFile == "")))
             {
                 ConfigParser.setValue("AuthorizedKeysFile", PathToCertificateTextBox.Text);
             }
-            if (!(PrintMotd == PrintMessageOfTheDayCheckBox.Checked.ToString() || (PrintMessageOfTheDayCheckBox.Checked == true && PrintMotd == "yes")))
+            if (!((PrintMessageOfTheDayCheckBox.Checked == false && PrintMotd == "no") || 
+                (PrintMessageOfTheDayCheckBox.Checked == true && PrintMotd == "yes")))
             {
-                ConfigParser.setValue("PrintMotd", PrintMessageOfTheDayCheckBox.Checked.ToString());
+                if (PrintMessageOfTheDayCheckBox.Checked == true)
+                {
+                    ConfigParser.setValue("PrintMotd", "yes");
+                }
+                else
+                {
+                    ConfigParser.setValue("PrintMotd", "no");
+                }
             }
             if (!(plainFileContent.ToString() == PrintMessageOfTheDayTextBox.Text || (plainFileContent.ToString() == "" && PrintMessageOfTheDayTextBox.Text == "")))
             {
                 this.writePlainFile(motdFile, PrintMessageOfTheDayTextBox.Text);
             }
-            if (!(PrintLastLog == PrintLastLoginCheckBox.Checked.ToString() || (PrintLastLoginCheckBox.Checked == true && PrintLastLog == "yes")))
+            if (!((PrintLastLoginCheckBox.Checked == false && PrintLastLog == "no") || 
+                (PrintLastLoginCheckBox.Checked == true && PrintLastLog == "yes")))
             {
-                ConfigParser.setValue("PrintLastLog", PrintLastLoginCheckBox.Checked.ToString());
+                if (PrintLastLoginCheckBox.Checked == true)
+                {
+                    ConfigParser.setValue("PrintLastLog", "yes");
+                }
+                else
+                {
+                    ConfigParser.setValue("PrintLastLog", "no");
+                }
             }
-            if (!(TCPKeepAlive == TestIfClientIsStillReachableCheckBox.Checked.ToString() || (TestIfClientIsStillReachableCheckBox.Checked == true && TCPKeepAlive == "yes")))
+            if (!((TestIfClientIsStillReachableCheckBox.Checked == false && TCPKeepAlive == "no") || 
+                (TestIfClientIsStillReachableCheckBox.Checked == true && TCPKeepAlive == "yes")))
             {
-                ConfigParser.setValue("TCPKeepAlive", TestIfClientIsStillReachableCheckBox.Checked.ToString());
+                if (TestIfClientIsStillReachableCheckBox.Checked == true)
+                {
+                    ConfigParser.setValue("TCPKeepAlive", "yes");
+                }
+                else
+                {
+                    ConfigParser.setValue("TCPKeepAlive", "no");
+                }
             }
             if (!(Compression == CompressionComboBox.Text || (CompressionComboBox.Text == "delayed" && Compression == "")))
             {
@@ -334,11 +349,11 @@ namespace EasySSHd
             }
             if (!(ClientAliveCountMax == PassesNumericUpDown.Value.ToString() || (PassesNumericUpDown.Value == 3 && ClientAliveCountMax == "")))
             {
-                ConfigParser.setValue("PrintLastLog", PrintLastLoginCheckBox.Checked.ToString());
+                ConfigParser.setValue("ClientAliveCountMax", PassesNumericUpDown.Value.ToString());
             }
-            if (!(MaxStartups == ConcurrentLoginsNumericUpDown.Value.ToString() || (ConcurrentLoginsNumericUpDown.Value == 10 && MaxStartups == "")))
+            if (!(Banner == MessageBeforeLoginTextBox.Text || (MessageBeforeLoginTextBox.Text == "" && Banner == "")))
             {
-                ConfigParser.setValue("MaxStartups", ConcurrentLoginsNumericUpDown.Value.ToString());
+                ConfigParser.setValue("Banner", MessageBeforeLoginTextBox.Text.Replace("\r\n", @"\r\n"));
             }
 
             ConfigParser.writeFile(installDir + @"\etc\sshd_config");
@@ -347,7 +362,7 @@ namespace EasySSHd
         }
 
         // Close Program and ask for saving unsaved changes
-        private void CancelButton_Click(object sender, EventArgs e)
+        private void quitButton_Click(object sender, EventArgs e)
         {
             if (!this.changed)
             {
@@ -380,6 +395,10 @@ namespace EasySSHd
                 {
                     MessageBox.Show("Changes saved successfully", "EasySSHd", MessageBoxButtons.OK);
                 }
+                else
+                {
+                    MessageBox.Show("ERROR: Saving not possible!", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -393,6 +412,7 @@ namespace EasySSHd
             ConcurrentLoginsNumericUpDown.Value = 10;
             MaxSessionsNumericUpDown.Value = 10;
             LoginPossibleWithCertificateCheckBox.Checked = true;
+            PathToCertificateTextBox.Text = "";
             CompressionComboBox.Text = "delayed";
             TestIfClientIsStillReachableCheckBox.Checked = true;
             TestConnectionOfClientEveryNumericUpDown.Value = 0;
@@ -404,27 +424,53 @@ namespace EasySSHd
             this.changed = true;
         }
 
-        private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
+        private void StartButton_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                sshd.Start();
+                sshd.WaitForStatus(ServiceControllerStatus.Running);
+            }
+            catch (InvalidOperationException)
+            {
+                MessageBox.Show("ERROR: Service couldn't be started. Please check your configuration.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-        }
-
+        
         private void BrowseButton_Click(object sender, EventArgs e)
         {
-            // folderBrowserDialog1_HelpRequest(sender,e);
+            if (openCertificate.ShowDialog().ToString() == "OK")
+            {
+                PathToCertificateTextBox.Text = "/cygdrive/" + openCertificate.FileName.Replace(@"\","/").Replace(":","");
+            }
         }
 
         private void EasySSHdWindow_TextChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
+        }
+
+        private void ServerPortNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
+        }
+
+        private void LoginTimeNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
+        }
+
+        private void MaxAuthTriesNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
+        }
+
+        private void ConcurrentLoginsNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
+        }
+
+        private void MaxSessionsNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
             this.changed = true;
         }
@@ -439,7 +485,42 @@ namespace EasySSHd
             this.changed = true;
         }
 
+        private void CompressionComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
+        }
+
+        private void TestIfClientIsStillReachableCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
+        }
+
+        private void TestConnectionOfClientEveryNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
+        }
+
+        private void PassesNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
+        }
+
+        private void MessageBeforeLoginTextBox_TextChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
+        }
+
+        private void PrintMessageOfTheDayCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
+        }
+
         private void PrintMessageOfTheDayTextBox_TextChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
+        }
+
+        private void PrintLastLoginCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             this.changed = true;
         }
