@@ -323,6 +323,7 @@
             this.BrowseButton.TabIndex = 4;
             this.BrowseButton.Text = "Browse";
             this.BrowseButton.UseVisualStyleBackColor = true;
+            this.BrowseButton.Click += new System.EventHandler(this.BrowseButton_Click);
             // 
             // PathToCertificateTextBox
             // 
@@ -330,6 +331,7 @@
             this.PathToCertificateTextBox.Name = "PathToCertificateTextBox";
             this.PathToCertificateTextBox.Size = new System.Drawing.Size(409, 22);
             this.PathToCertificateTextBox.TabIndex = 3;
+            this.PathToCertificateTextBox.TextChanged += new System.EventHandler(this.PathToCertificateTextBox_TextChanged);
             // 
             // PathToCertificateLabel
             // 
@@ -351,6 +353,7 @@
             this.LoginPossibleWithCertificateCheckBox.TabIndex = 1;
             this.LoginPossibleWithCertificateCheckBox.Text = "Login possible with Certificate";
             this.LoginPossibleWithCertificateCheckBox.UseVisualStyleBackColor = true;
+            this.LoginPossibleWithCertificateCheckBox.CheckedChanged += new System.EventHandler(this.LoginPossibleWithCertificateCheckBox_CheckedChanged);
             // 
             // CompressionTabPage
             // 

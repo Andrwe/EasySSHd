@@ -250,6 +250,10 @@ namespace EasySSHd
                         MessageBox.Show("The file for 'Message of the day' is not writeable. Please check the permissions.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
+                else
+                {
+                    plainFileContent.Add("");
+                }
             }
             catch (UnauthorizedAccessException)
             {
@@ -298,7 +302,7 @@ namespace EasySSHd
             }
             if (!(PubkeyAuthentication == LoginPossibleWithCertificateCheckBox.Checked.ToString() || (LoginPossibleWithCertificateCheckBox.Checked == true && PubkeyAuthentication == "yes")))
             {
-                //ConfigParser.setValue("PubkeyAuthentication", LoginPossibleWithCertificateCheckBox.Checked.ToString());
+                ConfigParser.setValue("PubkeyAuthentication", LoginPossibleWithCertificateCheckBox.Checked.ToString());
             }
             if (!(AuthorizedKeysFile == PathToCertificateTextBox.Text || (PathToCertificateTextBox.Text == "" && AuthorizedKeysFile == "")))
             {
@@ -306,11 +310,35 @@ namespace EasySSHd
             }
             if (!(PrintMotd == PrintMessageOfTheDayCheckBox.Checked.ToString() || (PrintMessageOfTheDayCheckBox.Checked == true && PrintMotd == "yes")))
             {
-                //ConfigParser.setValue("PrintMotd", PrintMessageOfTheDayCheckBox.Checked.ToString());
+                ConfigParser.setValue("PrintMotd", PrintMessageOfTheDayCheckBox.Checked.ToString());
             }
-            if (!(plainFileContent.ToString() == PrintMessageOfTheDayTextBox.Text))
+            if (!(plainFileContent.ToString() == PrintMessageOfTheDayTextBox.Text || (plainFileContent.ToString() == "" && PrintMessageOfTheDayTextBox.Text == "")))
             {
                 this.writePlainFile(motdFile, PrintMessageOfTheDayTextBox.Text);
+            }
+            if (!(PrintLastLog == PrintLastLoginCheckBox.Checked.ToString() || (PrintLastLoginCheckBox.Checked == true && PrintLastLog == "yes")))
+            {
+                ConfigParser.setValue("PrintLastLog", PrintLastLoginCheckBox.Checked.ToString());
+            }
+            if (!(TCPKeepAlive == TestIfClientIsStillReachableCheckBox.Checked.ToString() || (TestIfClientIsStillReachableCheckBox.Checked == true && TCPKeepAlive == "yes")))
+            {
+                ConfigParser.setValue("TCPKeepAlive", TestIfClientIsStillReachableCheckBox.Checked.ToString());
+            }
+            if (!(Compression == CompressionComboBox.Text || (CompressionComboBox.Text == "delayed" && Compression == "")))
+            {
+                ConfigParser.setValue("Compression", CompressionComboBox.Text);
+            }
+            if (!(ClientAliveInterval == TestConnectionOfClientEveryNumericUpDown.Value.ToString() || (TestConnectionOfClientEveryNumericUpDown.Value == 0 && ClientAliveInterval == "")))
+            {
+                ConfigParser.setValue("ClientAliveInterval", TestConnectionOfClientEveryNumericUpDown.Value.ToString());
+            }
+            if (!(ClientAliveCountMax == PassesNumericUpDown.Value.ToString() || (PassesNumericUpDown.Value == 3 && ClientAliveCountMax == "")))
+            {
+                ConfigParser.setValue("PrintLastLog", PrintLastLoginCheckBox.Checked.ToString());
+            }
+            if (!(MaxStartups == ConcurrentLoginsNumericUpDown.Value.ToString() || (ConcurrentLoginsNumericUpDown.Value == 10 && MaxStartups == "")))
+            {
+                ConfigParser.setValue("MaxStartups", ConcurrentLoginsNumericUpDown.Value.ToString());
             }
 
             ConfigParser.writeFile(installDir + @"\etc\sshd_config");
@@ -388,10 +416,25 @@ namespace EasySSHd
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            
+        }
 
+        private void BrowseButton_Click(object sender, EventArgs e)
+        {
+            // folderBrowserDialog1_HelpRequest(sender,e);
         }
 
         private void EasySSHdWindow_TextChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
+        }
+
+        private void LoginPossibleWithCertificateCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            this.changed = true;
+        }
+
+        private void PathToCertificateTextBox_TextChanged(object sender, EventArgs e)
         {
             this.changed = true;
         }
@@ -401,7 +444,7 @@ namespace EasySSHd
             this.changed = true;
         }
         
-
+        // Get content of a file which doesn't need to be parsed e.g. motd. Content is saved in "plainFileContent"
         private void readPlainFile(string file)
         {
             string fileLine = "";
@@ -415,11 +458,18 @@ namespace EasySSHd
             }
             fileStr.Close();
         }
-        private void writePlainFile(string file, string value)
+        // Write given text into given file without changing anything e.g. motd.
+        private void writePlainFile(string file, string text)
         {
             StreamWriter fileStr = new StreamWriter(file);
-            fileStr.WriteLine(value);
+            fileStr.WriteLine(text);
             fileStr.Close();
         }
+
+        
+
+        
+
+        
     }
 }
