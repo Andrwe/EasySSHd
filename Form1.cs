@@ -426,14 +426,39 @@ namespace EasySSHd
 
         private void StartButton_Click(object sender, EventArgs e)
         {
+            bool started = false;
             try
             {
                 sshd.Start();
-                sshd.WaitForStatus(ServiceControllerStatus.Running);
+                sshd.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.Parse("2") );
             }
             catch (InvalidOperationException)
             {
-                MessageBox.Show("ERROR: Service couldn't be started. Please check your configuration.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("ERROR: Service couldn't be started. Maybe it is already started.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                started = true;
+            }
+            if (sshd.Status == ServiceControllerStatus.Running && started == false)
+            {
+                MessageBox.Show("Service has been started correctly.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void StopButton_Click(object sender, EventArgs e)
+        {
+            bool stopped = false;
+            try
+            {
+                sshd.Stop();
+                sshd.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.Parse("2"));
+            }
+            catch (InvalidOperationException)
+            {
+                MessageBox.Show("ERROR: Service couldn't be stopped. Maybe it is already stopped.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                stopped = true;
+            }
+            if (sshd.Status == ServiceControllerStatus.Stopped && stopped == false)
+            {
+                MessageBox.Show("Service has been stopped correctly.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
         
@@ -546,11 +571,5 @@ namespace EasySSHd
             fileStr.WriteLine(text);
             fileStr.Close();
         }
-
-        
-
-        
-
-        
     }
 }

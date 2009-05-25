@@ -601,6 +601,7 @@
             this.StopButton.TabIndex = 12;
             this.StopButton.Text = "Stop";
             this.StopButton.UseVisualStyleBackColor = true;
+            this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
             // 
             // HelpLinkLabel
             // 
