@@ -357,6 +357,11 @@ namespace EasySSHd
             }
 
             ConfigParser.writeFile(installDir + @"\etc\sshd_config");
+            if (MessageBox.Show("Do you want to restart the service to load the changes?", "EasySSd", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                StopButton.PerformClick();
+                StartButton.PerformClick();
+            }
             this.changed = false;
             return true;
         }
@@ -393,7 +398,7 @@ namespace EasySSHd
             {
                 if (this.SaveChanges())
                 {
-                    MessageBox.Show("Changes saved successfully", "EasySSHd", MessageBoxButtons.OK);
+                    
                 }
                 else
                 {
@@ -458,7 +463,7 @@ namespace EasySSHd
             }
             if (sshd.Status == ServiceControllerStatus.Stopped && stopped == false)
             {
-                MessageBox.Show("Service has been stopped correctly.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
             }
         }
         
