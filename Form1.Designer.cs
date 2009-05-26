@@ -156,7 +156,8 @@
             this.ServerAddressTextBox.Name = "ServerAddressTextBox";
             this.ServerAddressTextBox.Size = new System.Drawing.Size(100, 22);
             this.ServerAddressTextBox.TabIndex = 4;
-            this.ServerAddressTextBox.TextChanged += new System.EventHandler(this.EasySSHdWindow_TextChanged);
+            //this.ServerAddressTextBox.TextChanged += new System.EventHandler(this.EasySSHdWindow_TextChanged);
+            this.ServerAddressTextBox.Leave += new System.EventHandler(this.ServerAddressTextBox_Leave);
             // 
             // LoginSecurityGB
             // 
@@ -554,10 +555,12 @@
             // 
             // LoggingBox
             // 
-            this.LoggingBox.Enabled = false;
+            this.LoggingBox.BackColor = System.Drawing.SystemColors.Control;
             this.LoggingBox.Location = new System.Drawing.Point(26, 383);
             this.LoggingBox.Multiline = true;
             this.LoggingBox.Name = "LoggingBox";
+            this.LoggingBox.ReadOnly = true;
+            this.LoggingBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.LoggingBox.Size = new System.Drawing.Size(530, 39);
             this.LoggingBox.TabIndex = 7;
             this.LoggingBox.Text = "EasySSHd Logging:";
@@ -648,7 +651,6 @@
             this.Name = "EasySSHdWindow";
             this.Text = "EasySSHd";
             this.Load += new System.EventHandler(this.EasySSHdWindow_Load);
-            this.TextChanged += new System.EventHandler(this.EasySSHdWindow_TextChanged);
             this.ServerConnectionGB.ResumeLayout(false);
             this.ServerConnectionGB.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ServerPortNumericUpDown)).EndInit();

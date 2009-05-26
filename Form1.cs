@@ -3,11 +3,14 @@ using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Net;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.ServiceProcess;
 using System.Windows.Forms;
-using System.IO;
+
 using Microsoft.Win32;
 using parser;
 
@@ -136,6 +139,14 @@ namespace EasySSHd
             else
             {
                 LoginPossibleWithCertificateCheckBox.Checked = true;
+            }
+            if (AuthorizedKeysFile != "")
+            {
+                PathToCertificateTextBox.Text = AuthorizedKeysFile.Replace(@"/cygdrive/", "").Replace(@"/", @"\").Replace("Z", "Z:");
+            }
+            else
+            {
+                PathToCertificateTextBox.Text = "";
             }
             if (Compression != "")
             {
@@ -297,7 +308,17 @@ namespace EasySSHd
             }
             if (!(AuthorizedKeysFile == PathToCertificateTextBox.Text || (PathToCertificateTextBox.Text == "" && AuthorizedKeysFile == "")))
             {
-                ConfigParser.setValue("AuthorizedKeysFile", PathToCertificateTextBox.Text);
+                if (PathToCertificateTextBox.Text != "")
+                {
+                    if (File.Exists(PathToCertificateTextBox.Text))
+                    {
+                        ConfigParser.setValue("AuthorizedKeysFile", "/cygdrive/" + PathToCertificateTextBox.Text.Replace(@"\", "/").Replace(":", ""));
+                    }
+                    else
+                    {
+                        MessageBox.Show("ERROR: This file does not exist.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
             if (!((PrintMessageOfTheDayCheckBox.Checked == false && PrintMotd == "no") || 
                 (PrintMessageOfTheDayCheckBox.Checked == true && PrintMotd == "yes")))
@@ -444,7 +465,7 @@ namespace EasySSHd
             }
             if (sshd.Status == ServiceControllerStatus.Running && started == false)
             {
-                MessageBox.Show("Service has been started correctly.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
             }
         }
 
@@ -471,13 +492,24 @@ namespace EasySSHd
         {
             if (openCertificate.ShowDialog().ToString() == "OK")
             {
-                PathToCertificateTextBox.Text = "/cygdrive/" + openCertificate.FileName.Replace(@"\","/").Replace(":","");
+                PathToCertificateTextBox.Text = openCertificate.FileName;
             }
         }
 
-        private void EasySSHdWindow_TextChanged(object sender, EventArgs e)
+        private void ServerAddressTextBox_Leave(object sender, EventArgs e)
         {
-            this.changed = true;
+            string ListenAddress = ConfigParser.getValue("ListenAddress");
+            if (!(ListenAddress == ServerAddressTextBox.Text || (ListenAddress == "" && ServerAddressTextBox.Text == "0.0.0.0")))
+            {
+                if (IsValidIP(ServerAddressTextBox.Text))
+                {
+                    this.changed = true;
+                }
+                else
+                {
+                    MessageBox.Show("ERROR: The ip-address you have set is not valid.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void ServerPortNumericUpDown_ValueChanged(object sender, EventArgs e)
@@ -576,5 +608,24 @@ namespace EasySSHd
             fileStr.WriteLine(text);
             fileStr.Close();
         }
+
+        private bool IsValidIP(string addr)
+        {
+            string pattern = @"^([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$";
+            Regex check = new Regex(pattern);
+            bool valid = false;
+
+            //check to make sure an ip address was provided and test if it is valid
+            if (addr == "")
+            {
+                valid = false;
+            }
+            else
+            {
+                valid = check.IsMatch(addr, 0);
+            }
+
+            return valid;
+        }        
     }
 }
