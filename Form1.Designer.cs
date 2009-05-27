@@ -72,6 +72,9 @@
             this.HelpLinkLabel = new System.Windows.Forms.LinkLabel();
             this.DefaultsButton = new System.Windows.Forms.Button();
             this.openCertificate = new System.Windows.Forms.OpenFileDialog();
+            this.MblBrowseButton = new System.Windows.Forms.Button();
+            this.openFileMbl = new System.Windows.Forms.OpenFileDialog();
+            this.LanguageLinkLabel = new System.Windows.Forms.LinkLabel();
             this.ServerConnectionGB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ServerPortNumericUpDown)).BeginInit();
             this.LoginSecurityGB.SuspendLayout();
@@ -492,6 +495,7 @@
             // InfoTabPage
             // 
             this.InfoTabPage.BackColor = System.Drawing.SystemColors.Control;
+            this.InfoTabPage.Controls.Add(this.MblBrowseButton);
             this.InfoTabPage.Controls.Add(this.PrintMessageOfTheDayTextBox);
             this.InfoTabPage.Controls.Add(this.PrintLastLoginCheckBox);
             this.InfoTabPage.Controls.Add(this.PrintMessageOfTheDayCheckBox);
@@ -613,7 +617,7 @@
             // HelpLinkLabel
             // 
             this.HelpLinkLabel.AutoSize = true;
-            this.HelpLinkLabel.Location = new System.Drawing.Point(2, 0);
+            this.HelpLinkLabel.Location = new System.Drawing.Point(32, 0);
             this.HelpLinkLabel.Name = "HelpLinkLabel";
             this.HelpLinkLabel.Size = new System.Drawing.Size(29, 13);
             this.HelpLinkLabel.TabIndex = 13;
@@ -634,6 +638,29 @@
             // 
             this.openCertificate.AddExtension = false;
             // 
+            // MblBrowseButton
+            // 
+            this.MblBrowseButton.Location = new System.Drawing.Point(155, 99);
+            this.MblBrowseButton.Name = "MblBrowseButton";
+            this.MblBrowseButton.Size = new System.Drawing.Size(75, 23);
+            this.MblBrowseButton.TabIndex = 5;
+            this.MblBrowseButton.Text = "Browse";
+            this.MblBrowseButton.UseVisualStyleBackColor = true;
+            // 
+            // openFileMbl
+            // 
+            this.openFileMbl.FileName = "openFileMbl";
+            // 
+            // LanguageLinkLabel
+            // 
+            this.LanguageLinkLabel.AutoSize = true;
+            this.LanguageLinkLabel.Location = new System.Drawing.Point(67, 0);
+            this.LanguageLinkLabel.Name = "LanguageLinkLabel";
+            this.LanguageLinkLabel.Size = new System.Drawing.Size(55, 13);
+            this.LanguageLinkLabel.TabIndex = 15;
+            this.LanguageLinkLabel.TabStop = true;
+            this.LanguageLinkLabel.Text = "Language";
+            // 
             // EasySSHdWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -641,6 +668,7 @@
             this.BackColor = System.Drawing.SystemColors.Control;
             this.CancelButton = this.quitButton;
             this.ClientSize = new System.Drawing.Size(584, 464);
+            this.Controls.Add(this.LanguageLinkLabel);
             this.Controls.Add(this.DefaultsButton);
             this.Controls.Add(this.HelpLinkLabel);
             this.Controls.Add(this.StopButton);
@@ -728,6 +756,9 @@
         private System.Windows.Forms.GroupBox OptionTwoGroupBox;
         private System.Windows.Forms.GroupBox OptionOneGroupBox;
         private System.Windows.Forms.OpenFileDialog openCertificate;
+        private System.Windows.Forms.Button MblBrowseButton;
+        private System.Windows.Forms.OpenFileDialog openFileMbl;
+        private System.Windows.Forms.LinkLabel LanguageLinkLabel;
     }
 }
 
