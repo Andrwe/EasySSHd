@@ -144,7 +144,7 @@
             this.ServerPortNumericUpDown.Size = new System.Drawing.Size(100, 22);
             this.ServerPortNumericUpDown.TabIndex = 5;
             this.ServerPortNumericUpDown.Value = new decimal(new int[] {
-            25,
+            22,
             0,
             0,
             0});
@@ -156,7 +156,6 @@
             this.ServerAddressTextBox.Name = "ServerAddressTextBox";
             this.ServerAddressTextBox.Size = new System.Drawing.Size(100, 22);
             this.ServerAddressTextBox.TabIndex = 4;
-            //this.ServerAddressTextBox.TextChanged += new System.EventHandler(this.EasySSHdWindow_TextChanged);
             this.ServerAddressTextBox.Leave += new System.EventHandler(this.ServerAddressTextBox_Leave);
             // 
             // LoginSecurityGB
@@ -418,6 +417,11 @@
             this.PassesNumericUpDown.Location = new System.Drawing.Point(272, 39);
             this.PassesNumericUpDown.Maximum = new decimal(new int[] {
             1000,
+            0,
+            0,
+            0});
+            this.PassesNumericUpDown.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
