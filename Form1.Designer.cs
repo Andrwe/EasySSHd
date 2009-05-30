@@ -59,11 +59,12 @@
             this.OptionOneGroupBox = new System.Windows.Forms.GroupBox();
             this.TestIfClientIsStillReachableCheckBox = new System.Windows.Forms.CheckBox();
             this.InfoTabPage = new System.Windows.Forms.TabPage();
+            this.MessageBeforeLoginTextBox = new System.Windows.Forms.TextBox();
+            this.MessageBeforeLoginBrowseButton = new System.Windows.Forms.Button();
             this.PrintMessageOfTheDayTextBox = new System.Windows.Forms.TextBox();
             this.PrintLastLoginCheckBox = new System.Windows.Forms.CheckBox();
             this.PrintMessageOfTheDayCheckBox = new System.Windows.Forms.CheckBox();
             this.MessageBeforeLoginLabel = new System.Windows.Forms.Label();
-            this.MessageBeforeLoginTextBox = new System.Windows.Forms.TextBox();
             this.LoggingBox = new System.Windows.Forms.TextBox();
             this.ApplyButton = new System.Windows.Forms.Button();
             this.quitButton = new System.Windows.Forms.Button();
@@ -72,8 +73,7 @@
             this.HelpLinkLabel = new System.Windows.Forms.LinkLabel();
             this.DefaultsButton = new System.Windows.Forms.Button();
             this.openCertificate = new System.Windows.Forms.OpenFileDialog();
-            this.MblBrowseButton = new System.Windows.Forms.Button();
-            this.openFileMbl = new System.Windows.Forms.OpenFileDialog();
+            this.openMessageBeforeLogin = new System.Windows.Forms.OpenFileDialog();
             this.LanguageLinkLabel = new System.Windows.Forms.LinkLabel();
             this.ServerConnectionGB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ServerPortNumericUpDown)).BeginInit();
@@ -495,18 +495,36 @@
             // InfoTabPage
             // 
             this.InfoTabPage.BackColor = System.Drawing.SystemColors.Control;
-            this.InfoTabPage.Controls.Add(this.MblBrowseButton);
+            this.InfoTabPage.Controls.Add(this.MessageBeforeLoginTextBox);
+            this.InfoTabPage.Controls.Add(this.MessageBeforeLoginBrowseButton);
             this.InfoTabPage.Controls.Add(this.PrintMessageOfTheDayTextBox);
             this.InfoTabPage.Controls.Add(this.PrintLastLoginCheckBox);
             this.InfoTabPage.Controls.Add(this.PrintMessageOfTheDayCheckBox);
             this.InfoTabPage.Controls.Add(this.MessageBeforeLoginLabel);
-            this.InfoTabPage.Controls.Add(this.MessageBeforeLoginTextBox);
             this.InfoTabPage.Location = new System.Drawing.Point(4, 25);
             this.InfoTabPage.Name = "InfoTabPage";
             this.InfoTabPage.Size = new System.Drawing.Size(522, 139);
             this.InfoTabPage.TabIndex = 3;
             this.InfoTabPage.Text = "Info";
             this.InfoTabPage.ToolTipText = "information printed before or after login";
+            // 
+            // MessageBeforeLoginTextBox
+            // 
+            this.MessageBeforeLoginTextBox.Location = new System.Drawing.Point(24, 46);
+            this.MessageBeforeLoginTextBox.Name = "MessageBeforeLoginTextBox";
+            this.MessageBeforeLoginTextBox.Size = new System.Drawing.Size(206, 22);
+            this.MessageBeforeLoginTextBox.TabIndex = 6;
+            this.MessageBeforeLoginTextBox.TextChanged += new System.EventHandler(this.MessageBeforeLoginTextBox_TextChanged);
+            // 
+            // MessageBeforeLoginBrowseButton
+            // 
+            this.MessageBeforeLoginBrowseButton.Location = new System.Drawing.Point(155, 74);
+            this.MessageBeforeLoginBrowseButton.Name = "MessageBeforeLoginBrowseButton";
+            this.MessageBeforeLoginBrowseButton.Size = new System.Drawing.Size(75, 23);
+            this.MessageBeforeLoginBrowseButton.TabIndex = 5;
+            this.MessageBeforeLoginBrowseButton.Text = "Browse";
+            this.MessageBeforeLoginBrowseButton.UseVisualStyleBackColor = true;
+            this.MessageBeforeLoginBrowseButton.Click += new System.EventHandler(this.MessageBeforeLoginBrowseButton_Click);
             // 
             // PrintMessageOfTheDayTextBox
             // 
@@ -551,15 +569,6 @@
             this.MessageBeforeLoginLabel.Size = new System.Drawing.Size(131, 16);
             this.MessageBeforeLoginLabel.TabIndex = 1;
             this.MessageBeforeLoginLabel.Text = "Message before login";
-            // 
-            // MessageBeforeLoginTextBox
-            // 
-            this.MessageBeforeLoginTextBox.Location = new System.Drawing.Point(24, 43);
-            this.MessageBeforeLoginTextBox.Multiline = true;
-            this.MessageBeforeLoginTextBox.Name = "MessageBeforeLoginTextBox";
-            this.MessageBeforeLoginTextBox.Size = new System.Drawing.Size(206, 50);
-            this.MessageBeforeLoginTextBox.TabIndex = 0;
-            this.MessageBeforeLoginTextBox.TextChanged += new System.EventHandler(this.MessageBeforeLoginTextBox_TextChanged);
             // 
             // LoggingBox
             // 
@@ -638,18 +647,9 @@
             // 
             this.openCertificate.AddExtension = false;
             // 
-            // MblBrowseButton
+            // openMessageBeforeLogin
             // 
-            this.MblBrowseButton.Location = new System.Drawing.Point(155, 99);
-            this.MblBrowseButton.Name = "MblBrowseButton";
-            this.MblBrowseButton.Size = new System.Drawing.Size(75, 23);
-            this.MblBrowseButton.TabIndex = 5;
-            this.MblBrowseButton.Text = "Browse";
-            this.MblBrowseButton.UseVisualStyleBackColor = true;
-            // 
-            // openFileMbl
-            // 
-            this.openFileMbl.FileName = "openFileMbl";
+            this.openMessageBeforeLogin.FileName = "openFileMbl";
             // 
             // LanguageLinkLabel
             // 
@@ -745,7 +745,6 @@
         private System.Windows.Forms.Label PassesLabel;
         private System.Windows.Forms.NumericUpDown PassesNumericUpDown;
         private System.Windows.Forms.Label MessageBeforeLoginLabel;
-        private System.Windows.Forms.TextBox MessageBeforeLoginTextBox;
         private System.Windows.Forms.CheckBox PrintLastLoginCheckBox;
         private System.Windows.Forms.CheckBox PrintMessageOfTheDayCheckBox;
         private System.Windows.Forms.Button DefaultsButton;
@@ -756,9 +755,10 @@
         private System.Windows.Forms.GroupBox OptionTwoGroupBox;
         private System.Windows.Forms.GroupBox OptionOneGroupBox;
         private System.Windows.Forms.OpenFileDialog openCertificate;
-        private System.Windows.Forms.Button MblBrowseButton;
-        private System.Windows.Forms.OpenFileDialog openFileMbl;
+        private System.Windows.Forms.Button MessageBeforeLoginBrowseButton;
+        private System.Windows.Forms.OpenFileDialog openMessageBeforeLogin;
         private System.Windows.Forms.LinkLabel LanguageLinkLabel;
+        private System.Windows.Forms.TextBox MessageBeforeLoginTextBox;
     }
 }
 

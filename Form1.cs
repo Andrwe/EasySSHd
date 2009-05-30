@@ -142,7 +142,11 @@ namespace EasySSHd
             }
             if (AuthorizedKeysFile != "")
             {
-                PathToCertificateTextBox.Text = AuthorizedKeysFile.Replace(@"/cygdrive/", "").Replace(@"/", @"\").Replace("Z", "Z:");
+                char[] drive = new char[2];
+                string tmpAuth = AuthorizedKeysFile;
+                tmpAuth = AuthorizedKeysFile.Substring(11);
+                MessageBox.Show(tmpAuth);
+                PathToCertificateTextBox.Text = AuthorizedKeysFile.Replace(@"/cygdrive/", "").Replace(@"/", @"\");
             }
             else
             {
@@ -374,6 +378,17 @@ namespace EasySSHd
             }
             if (!(Banner == MessageBeforeLoginTextBox.Text || (MessageBeforeLoginTextBox.Text == "" && Banner == "")))
             {
+                if (MessageBeforeLoginTextBox.Text != "")
+                {
+                    if (File.Exists(MessageBeforeLoginTextBox.Text))
+                    {
+                        ConfigParser.setValue("Banner", "/cygdrive/" + MessageBeforeLoginTextBox.Text.Replace(@"\", "/").Replace(":", ""));
+                    }
+                    else
+                    {
+                        MessageBox.Show("ERROR: This file does not exist.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
                 ConfigParser.setValue("Banner", MessageBeforeLoginTextBox.Text.Replace("\r\n", @"\r\n"));
             }
 
@@ -572,6 +587,14 @@ namespace EasySSHd
             this.changed = true;
         }
 
+        private void MessageBeforeLoginBrowseButton_Click(object sender, EventArgs e)
+        {
+            if (openMessageBeforeLogin.ShowDialog().ToString() == "OK")
+            {
+                MessageBeforeLoginTextBox.Text = openMessageBeforeLogin.FileName;
+            }
+        }
+
         private void PrintMessageOfTheDayCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             this.changed = true;
@@ -626,6 +649,9 @@ namespace EasySSHd
             }
 
             return valid;
-        }        
+        }
+
+
+                
     }
 }
