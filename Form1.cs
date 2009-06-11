@@ -142,11 +142,7 @@ namespace EasySSHd
             }
             if (AuthorizedKeysFile != "")
             {
-                char[] drive = new char[2];
-                string tmpAuth = AuthorizedKeysFile;
-                tmpAuth = AuthorizedKeysFile.Substring(11);
-                MessageBox.Show(tmpAuth);
-                PathToCertificateTextBox.Text = AuthorizedKeysFile.Replace(@"/cygdrive/", "").Replace(@"/", @"\");
+                PathToCertificateTextBox.Text = getShownPath(AuthorizedKeysFile);
             }
             else
             {
@@ -193,7 +189,7 @@ namespace EasySSHd
             }
             if (Banner != "")
             {
-                MessageBeforeLoginTextBox.Text = Banner.Replace(@"\r\n", "\r\n");
+                MessageBeforeLoginTextBox.Text = this.getShownPath(Banner);
             }
             else
             {
@@ -310,7 +306,7 @@ namespace EasySSHd
                     ConfigParser.setValue("PubkeyAuthentication", "no");
                 }
             }
-            if (!(AuthorizedKeysFile == PathToCertificateTextBox.Text || (PathToCertificateTextBox.Text == "" && AuthorizedKeysFile == "")))
+            if (!(getShownPath(AuthorizedKeysFile) == PathToCertificateTextBox.Text || (PathToCertificateTextBox.Text == "" && AuthorizedKeysFile == "")))
             {
                 if (PathToCertificateTextBox.Text != "")
                 {
@@ -376,7 +372,7 @@ namespace EasySSHd
             {
                 ConfigParser.setValue("ClientAliveCountMax", PassesNumericUpDown.Value.ToString());
             }
-            if (!(Banner == MessageBeforeLoginTextBox.Text || (MessageBeforeLoginTextBox.Text == "" && Banner == "")))
+            if (!(getShownPath(Banner) == MessageBeforeLoginTextBox.Text || (MessageBeforeLoginTextBox.Text == "" && Banner == "")))
             {
                 if (MessageBeforeLoginTextBox.Text != "")
                 {
@@ -389,7 +385,6 @@ namespace EasySSHd
                         MessageBox.Show("ERROR: This file does not exist.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                ConfigParser.setValue("Banner", MessageBeforeLoginTextBox.Text.Replace("\r\n", @"\r\n"));
             }
 
             ConfigParser.writeFile(installDir + @"\etc\sshd_config");
@@ -651,7 +646,16 @@ namespace EasySSHd
             return valid;
         }
 
-
+        private string getShownPath(string path)
+        {
+            if (path.Length > 11)
+            {
+                string shownPath = path.Substring(11);
+                string drive = path.Substring(10).Remove(1);
+                return drive + ":" + shownPath.Replace(@"/", @"\");
+            }
+            return "";
+        }
                 
     }
 }
