@@ -378,7 +378,8 @@
             // 
             // CompressionComboBox
             // 
-            this.CompressionComboBox.FormattingEnabled = true;
+            this.CompressionComboBox.AccessibleRole = System.Windows.Forms.AccessibleRole.ComboBox;
+            this.CompressionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CompressionComboBox.Items.AddRange(new object[] {
             "on",
             "off",
@@ -387,7 +388,6 @@
             this.CompressionComboBox.Name = "CompressionComboBox";
             this.CompressionComboBox.Size = new System.Drawing.Size(76, 24);
             this.CompressionComboBox.TabIndex = 0;
-            this.CompressionComboBox.Text = "yes";
             this.CompressionComboBox.SelectedIndexChanged += new System.EventHandler(this.CompressionComboBox_SelectedIndexChanged);
             // 
             // CheckingTabPage

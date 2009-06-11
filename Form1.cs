@@ -79,7 +79,14 @@ namespace EasySSHd
 
             if (ListenAddress != "") 
             {
-                ServerAddressTextBox.Text = ListenAddress;
+                if(this.IsValidIP(ListenAddress))
+                {
+                    ServerAddressTextBox.Text = ListenAddress;
+                }
+                else
+                {
+                    ServerAddressTextBox.Text = "0.0.0.0";
+                }
             }
             else
             {
@@ -242,6 +249,7 @@ namespace EasySSHd
         // Save all changes into sshd_config file
         private bool SaveChanges()
         {
+            bool error = false;
             string installDir = installDirRegKey.GetValue("native").ToString();
             string motdFile = installDir + @"\etc\motd";
 
@@ -252,6 +260,7 @@ namespace EasySSHd
             catch (UnauthorizedAccessException)
             {
                 MessageBox.Show("The file for 'Message of the day' is not accessable. Please check the permissions.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                error = true;
             }
 
             string ListenAddress = ConfigParser.getValue("ListenAddress");
@@ -272,7 +281,15 @@ namespace EasySSHd
 
             if (!(ListenAddress == ServerAddressTextBox.Text || (ListenAddress == "" && ServerAddressTextBox.Text == "0.0.0.0")))
             {
-                ConfigParser.setValue("ListenAddress", ServerAddressTextBox.Text);
+                if (this.IsValidIP(ServerAddressTextBox.Text))
+                {
+                    ConfigParser.setValue("ListenAddress", ServerAddressTextBox.Text);
+                }
+                else
+                {
+                    MessageBox.Show("ERROR: The IP address is not valid.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    error = true;
+                }
             }
             if (!(Port == ServerPortNumericUpDown.Value.ToString() || (Port == "" && ServerPortNumericUpDown.Value == 22)))
             {
@@ -317,6 +334,7 @@ namespace EasySSHd
                     else
                     {
                         MessageBox.Show("ERROR: This file does not exist.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        error = true;
                     }
                 }
             }
@@ -383,18 +401,23 @@ namespace EasySSHd
                     else
                     {
                         MessageBox.Show("ERROR: This file does not exist.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        error = true;
                     }
                 }
             }
 
-            ConfigParser.writeFile(installDir + @"\etc\sshd_config");
-            if (MessageBox.Show("Do you want to restart the service to load the changes?", "EasySSd", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (!error)
             {
-                StopButton.PerformClick();
-                StartButton.PerformClick();
+                ConfigParser.writeFile(installDir + @"\etc\sshd_config");
+                if (MessageBox.Show("Do you want to restart the service to load the changes?", "EasySSd", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    StopButton.PerformClick();
+                    StartButton.PerformClick();
+                }
+                this.changed = false;
+                return true;
             }
-            this.changed = false;
-            return true;
+            return false;
         }
 
         // Close Program and ask for saving unsaved changes
@@ -427,11 +450,7 @@ namespace EasySSHd
         {
             if (this.changed)
             {
-                if (this.SaveChanges())
-                {
-                    
-                }
-                else
+                if (!this.SaveChanges())
                 {
                     MessageBox.Show("ERROR: Saving not possible!", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
