@@ -6,5 +6,6 @@ syntax: glob
 *.aps
 *.clw
 *.pdb
+*.exe
 *\Debug\*
 *\Release\*
