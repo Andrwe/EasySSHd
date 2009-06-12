@@ -34,13 +34,53 @@ namespace EasySSHd
         // Called on Window Load, Initialize all Values
         private void EasySSHdWindow_Load(object sender, EventArgs e)
         {
-            string installDir = installDirRegKey.GetValue("native").ToString();
-            ConfigParser.readFile(installDir + @"\etc\sshd_config");
-            string motdFile = installDir + @"\etc\motd";
+            string motdFile = "";
+            string installDir = "";
+            try
+            {
+                installDir = installDirRegKey.GetValue("native").ToString();
+            }
+            catch (NullReferenceException)
+            {
+                if (MessageBox.Show("The installation path couldn't be detected. Please (re)install EasySSHd.", "EasySSHd", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) == DialogResult.Retry)
+                {
+                    EasySSHdWindow_Load(sender, e);
+                }
+                else
+                {
+                    Close();
+                }
+            }
+
+            if (installDir != "")
+            {
+                switch (ConfigParser.readFile(installDir + @"\etc\sshd_config"))
+                {
+                    case 1:
+                        this.writePlainFile(installDir + @"\etc\sshd_config", "");
+                        EasySSHdWindow_Load(sender, e);
+                        break;
+                    case 2:
+                        if (MessageBox.Show("The config file is not readable. Please check the permissions.", "EasySSHd", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) == DialogResult.Retry)
+                        {
+                            EasySSHdWindow_Load(sender, e);
+                        }
+                        else
+                        {
+                            Close();
+                        }
+                        break;
+                }
+            }
+
+            motdFile = installDir + @"\etc\motd";
 
             try
             {
-                this.readPlainFile(motdFile);
+                if (motdFile != @"\etc\motd")
+                {
+                    this.readPlainFile(motdFile);
+                }
             }
             catch (FileNotFoundException)
             {
@@ -157,7 +197,22 @@ namespace EasySSHd
             }
             if (Compression != "")
             {
-                CompressionComboBox.Text = Compression;
+                switch (Compression)
+                {
+                    case "yes":
+                        CompressionComboBox.Text = "On";
+                        break;
+                    case "no":
+                        CompressionComboBox.Text = "Off";
+                        break;
+                    case "delayed":
+                        CompressionComboBox.Text = "delayed";
+                        break;
+                    default:
+                        CompressionComboBox.Text = "delayed";
+                        break;
+                }
+                
             }
             else
             {
@@ -380,7 +435,21 @@ namespace EasySSHd
             }
             if (!(Compression == CompressionComboBox.Text || (CompressionComboBox.Text == "delayed" && Compression == "")))
             {
-                ConfigParser.setValue("Compression", CompressionComboBox.Text);
+                switch(CompressionComboBox.Text)
+                {
+                    case "On":
+                        ConfigParser.setValue("Compression", "yes");
+                        break;
+                    case "Off":
+                        ConfigParser.setValue("Compression", "no");
+                        break;
+                    case "delayed":
+                        ConfigParser.setValue("Compression", "delayed");
+                        break;
+                    default:
+                        ConfigParser.setValue("Compression", "delayed");
+                        break;
+                }
             }
             if (!(ClientAliveInterval == TestConnectionOfClientEveryNumericUpDown.Value.ToString() || (TestConnectionOfClientEveryNumericUpDown.Value == 0 && ClientAliveInterval == "")))
             {

@@ -7,7 +7,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{69821B90-D3FD-44AA-A07D-0A6B431F4FB1}
 AppName=EasySSHd
-AppVerName=EasySSHd 0.1
+AppVerName=EasySSHd 0.1.0
 AppPublisher=RENONA-Studios
 AppPublisherURL=http://renona-studios.org
 AppSupportURL=http://renona-studios.org
@@ -16,7 +16,7 @@ DefaultDirName={pf}\EasySSHd
 DefaultGroupName=EasySSHd
 AllowNoIcons=yes
 OutputBaseFilename=EasySSHd-setup
-WizardSmallImageFile=Z:\EasySSHd-Install\EasySSH.bmp
+WizardSmallImageFile=Z:\EasySSHd-Install\EasySSHd.bmp
 Compression=lzma
 SolidCompression=yes
 
@@ -26,9 +26,14 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [Files]
 Source: "Z:\EasySSHd-Install\cygwin\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+Source: "Z:\EasySSHd-Install\mercurial\bin\Release\EasySSHd.exe"; DestDir: "{app}\GUI"; Flags: ignoreversion
+Source: "Z:\EasySSHd-Install\mercurial\bin\Release\parser.dll"; DestDir: "{app}\GUI"; Flags: ignoreversion
+Source: "Z:\EasySSHd-Install\EasySSHd.ico"; DestDir: "{app}\GUI"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{cm:UninstallProgram,EasySSHd}"; Filename: "{uninstallexe}"
+Name: "{group}\EasySSHd"; Filename: "{app}\GUI\EasySSHd.exe"; IconFilename: "{app}\GUI\EasySSHd.ico"; Comment: "Windows SSH-server with GUI by RENONA Studios"
+Name: "{commondesktop}\EasySSHd"; Filename: "{app}\GUI\EasySSHd.exe"; IconFilename: "{app}\GUI\EasySSHd.ico"; Comment: "Windows SSH-server with GUI by RENONA Studios"
 
 [Registry]
 Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions"; Flags: deletekey uninsdeletekey
