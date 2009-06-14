@@ -510,7 +510,7 @@ namespace EasySSHd
                 {
                     if (ConfigParser.writeFile(installDir + @"\etc\sshd_config") == 0)
                     {
-                        LoggingBox.AppendText("Changes saved.");
+                        LoggingBox.AppendText("\r\nChanges saved.");
                         if (MessageBox.Show("Do you want to restart the service to load the changes?", "EasySSd", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             StopButton.PerformClick();                            
@@ -527,7 +527,7 @@ namespace EasySSHd
                         }
                         else
                         {
-                            LoggingBox.AppendText("Saving aborted: Config file not writable.");
+                            LoggingBox.AppendText("\r\nSaving aborted: Config file not writable.");
                             return false;
                         }
                     }
@@ -551,7 +551,7 @@ namespace EasySSHd
                 {
                     if (!this.SaveChanges())
                     {
-                        LoggingBox.AppendText("Saving aborted: An error occured while saving changes.");
+                        LoggingBox.AppendText("\r\nSaving aborted: An error occured while saving changes.");
                         MessageBox.Show("ERROR: Saving not possible!", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     Application.Exit();
@@ -570,7 +570,7 @@ namespace EasySSHd
             {
                 if (!this.SaveChanges())
                 {
-                    LoggingBox.AppendText("Saving aborted: An error occured while saving changes.");
+                    LoggingBox.AppendText("\r\nSaving aborted: An error occured while saving changes.");
                     MessageBox.Show("ERROR: Saving not possible!", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -601,7 +601,7 @@ namespace EasySSHd
         private void StartButton_Click(object sender, EventArgs e)
         {
             bool started = false;
-            LoggingBox.AppendText("Starting Service ...");
+            LoggingBox.AppendText("\r\nStarting Service ...");
             try
             {
                 sshd.Start();
@@ -609,20 +609,20 @@ namespace EasySSHd
             }
             catch (InvalidOperationException)
             {
-                LoggingBox.AppendText("Service couldn't be started. Maybe already started.");
+                LoggingBox.AppendText("\r\nService couldn't be started. Maybe already started.");
                 MessageBox.Show("ERROR: Service couldn't be started. Maybe it is already started.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 started = true;
             }
             if (sshd.Status == ServiceControllerStatus.Running && started == false)
             {
-                LoggingBox.AppendText("Service started correctly");
+                LoggingBox.AppendText("\r\nService started correctly");
             }
         }
 
         private void StopButton_Click(object sender, EventArgs e)
         {
             bool stopped = false;
-            LoggingBox.AppendText("Stopping Service ...");
+            LoggingBox.AppendText("\r\nStopping Service ...");
             try
             {
                 sshd.Stop();
@@ -630,13 +630,13 @@ namespace EasySSHd
             }
             catch (InvalidOperationException)
             {
-                LoggingBox.AppendText("Service couldn't be stopped. Maybe already stopped.");
+                LoggingBox.AppendText("\r\nService couldn't be stopped. Maybe already stopped.");
                 MessageBox.Show("ERROR: Service couldn't be stopped. Maybe it is already stopped.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 stopped = true;
             }
             if (sshd.Status == ServiceControllerStatus.Stopped && stopped == false)
             {
-                LoggingBox.AppendText("Service stopped correctly.");
+                LoggingBox.AppendText("\r\nService stopped correctly.");
             }
         }
         
@@ -659,7 +659,7 @@ namespace EasySSHd
                 }
                 else
                 {
-                    LoggingBox.AppendText("Not a valid IP-address has been set.");
+                    LoggingBox.AppendText("\r\nNot a valid IP-address has been set.");
                     MessageBox.Show("ERROR: The ip-address you have set is not valid.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
