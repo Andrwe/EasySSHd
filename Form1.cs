@@ -305,186 +305,234 @@ namespace EasySSHd
         private bool SaveChanges()
         {
             bool error = false;
-            string installDir = installDirRegKey.GetValue("native").ToString();
-            string motdFile = installDir + @"\etc\motd";
-
+            bool errorMotd = false;
+            string installDir = "";
             try
             {
-                this.readPlainFile(motdFile);
+                installDir = installDirRegKey.GetValue("native").ToString();
             }
-            catch (UnauthorizedAccessException)
+            catch (NullReferenceException)
             {
-                MessageBox.Show("The file for 'Message of the day' is not accessable. Please check the permissions.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                error = true;
-            }
-
-            string ListenAddress = ConfigParser.getValue("ListenAddress");
-            string Port = ConfigParser.getValue("Port");
-            string LoginGraceTime = ConfigParser.getValue("LoginGraceTime");
-            string MaxAuthTries = ConfigParser.getValue("MaxAuthTries");
-            string MaxSessions = ConfigParser.getValue("MaxSessions");
-            string PubkeyAuthentication = ConfigParser.getValue("PubkeyAuthentication");
-            string AuthorizedKeysFile = ConfigParser.getValue("AuthorizedKeysFile");
-            string PrintMotd = ConfigParser.getValue("PrintMotd");
-            string PrintLastLog = ConfigParser.getValue("PrintLastLog");
-            string TCPKeepAlive = ConfigParser.getValue("TCPKeepAlive");
-            string Compression = ConfigParser.getValue("Compression");
-            string ClientAliveInterval = ConfigParser.getValue("ClientAliveInterval");
-            string ClientAliveCountMax = ConfigParser.getValue("ClientAliveCountMax");
-            string MaxStartups = ConfigParser.getValue("MaxStartups");
-            string Banner = ConfigParser.getValue("Banner");
-
-            if (!(ListenAddress == ServerAddressTextBox.Text || (ListenAddress == "" && ServerAddressTextBox.Text == "0.0.0.0")))
-            {
-                if (this.IsValidIP(ServerAddressTextBox.Text))
+                MessageBox.Show("The installation path couldn't be detected. Please (re)install EasySSHd.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 {
-                    ConfigParser.setValue("ListenAddress", ServerAddressTextBox.Text);
-                }
-                else
-                {
-                    MessageBox.Show("ERROR: The IP address is not valid.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     error = true;
                 }
             }
-            if (!(Port == ServerPortNumericUpDown.Value.ToString() || (Port == "" && ServerPortNumericUpDown.Value == 22)))
-            {
-                ConfigParser.setValue("Port", ServerPortNumericUpDown.Value.ToString());
-            }
-            if (!(LoginGraceTime == LoginTimeNumericUpDown.Value.ToString() || (LoginTimeNumericUpDown.Value == 120 && LoginGraceTime == "")))
-            {
-                ConfigParser.setValue("LoginGraceTime", LoginTimeNumericUpDown.Value.ToString());
-            }
-            if (!(MaxAuthTries == MaxAuthTriesNumericUpDown.Value.ToString() || (MaxAuthTriesNumericUpDown.Value == 6 && MaxAuthTries == "")))
-            {
-                ConfigParser.setValue("MaxAuthTries", MaxAuthTriesNumericUpDown.Value.ToString());
-            }
-            if (!(MaxStartups == ConcurrentLoginsNumericUpDown.Value.ToString() || (ConcurrentLoginsNumericUpDown.Value == 10 && MaxStartups == "")))
-            {
-                ConfigParser.setValue("MaxStartups", ConcurrentLoginsNumericUpDown.Value.ToString());
-            }
-            if (!(MaxSessions == MaxSessionsNumericUpDown.Value.ToString() || (MaxSessionsNumericUpDown.Value == 10 && MaxSessions == "")))
-            {
-                ConfigParser.setValue("MaxSessions", MaxSessionsNumericUpDown.Value.ToString());
-            }
-            if (!((LoginPossibleWithCertificateCheckBox.Checked == false && PubkeyAuthentication == "no") ||
-                (LoginPossibleWithCertificateCheckBox.Checked == true && PubkeyAuthentication == "yes")))
-            {
-                if (LoginPossibleWithCertificateCheckBox.Checked == true)
-                {
-                    ConfigParser.setValue("PubkeyAuthentication", "yes");
-                }
-                else
-                {
-                    ConfigParser.setValue("PubkeyAuthentication", "no");
-                }
-            }
-            if (!(getShownPath(AuthorizedKeysFile) == PathToCertificateTextBox.Text || (PathToCertificateTextBox.Text == "" && AuthorizedKeysFile == "")))
-            {
-                if (PathToCertificateTextBox.Text != "")
-                {
-                    if (File.Exists(PathToCertificateTextBox.Text))
-                    {
-                        ConfigParser.setValue("AuthorizedKeysFile", "/cygdrive/" + PathToCertificateTextBox.Text.Replace(@"\", "/").Replace(":", ""));
-                    }
-                    else
-                    {
-                        MessageBox.Show("ERROR: This file does not exist.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        error = true;
-                    }
-                }
-            }
-            if (!((PrintMessageOfTheDayCheckBox.Checked == false && PrintMotd == "no") || 
-                (PrintMessageOfTheDayCheckBox.Checked == true && PrintMotd == "yes")))
-            {
-                if (PrintMessageOfTheDayCheckBox.Checked == true)
-                {
-                    ConfigParser.setValue("PrintMotd", "yes");
-                }
-                else
-                {
-                    ConfigParser.setValue("PrintMotd", "no");
-                }
-            }
-            if (!(plainFileContent.ToString() == PrintMessageOfTheDayTextBox.Text || (plainFileContent.ToString() == "" && PrintMessageOfTheDayTextBox.Text == "")))
-            {
-                this.writePlainFile(motdFile, PrintMessageOfTheDayTextBox.Text);
-            }
-            if (!((PrintLastLoginCheckBox.Checked == false && PrintLastLog == "no") || 
-                (PrintLastLoginCheckBox.Checked == true && PrintLastLog == "yes")))
-            {
-                if (PrintLastLoginCheckBox.Checked == true)
-                {
-                    ConfigParser.setValue("PrintLastLog", "yes");
-                }
-                else
-                {
-                    ConfigParser.setValue("PrintLastLog", "no");
-                }
-            }
-            if (!((TestIfClientIsStillReachableCheckBox.Checked == false && TCPKeepAlive == "no") || 
-                (TestIfClientIsStillReachableCheckBox.Checked == true && TCPKeepAlive == "yes")))
-            {
-                if (TestIfClientIsStillReachableCheckBox.Checked == true)
-                {
-                    ConfigParser.setValue("TCPKeepAlive", "yes");
-                }
-                else
-                {
-                    ConfigParser.setValue("TCPKeepAlive", "no");
-                }
-            }
-            if (!(Compression == CompressionComboBox.Text || (CompressionComboBox.Text == "delayed" && Compression == "")))
-            {
-                switch(CompressionComboBox.Text)
-                {
-                    case "On":
-                        ConfigParser.setValue("Compression", "yes");
-                        break;
-                    case "Off":
-                        ConfigParser.setValue("Compression", "no");
-                        break;
-                    case "delayed":
-                        ConfigParser.setValue("Compression", "delayed");
-                        break;
-                    default:
-                        ConfigParser.setValue("Compression", "delayed");
-                        break;
-                }
-            }
-            if (!(ClientAliveInterval == TestConnectionOfClientEveryNumericUpDown.Value.ToString() || (TestConnectionOfClientEveryNumericUpDown.Value == 0 && ClientAliveInterval == "")))
-            {
-                ConfigParser.setValue("ClientAliveInterval", TestConnectionOfClientEveryNumericUpDown.Value.ToString());
-            }
-            if (!(ClientAliveCountMax == PassesNumericUpDown.Value.ToString() || (PassesNumericUpDown.Value == 3 && ClientAliveCountMax == "")))
-            {
-                ConfigParser.setValue("ClientAliveCountMax", PassesNumericUpDown.Value.ToString());
-            }
-            if (!(getShownPath(Banner) == MessageBeforeLoginTextBox.Text || (MessageBeforeLoginTextBox.Text == "" && Banner == "")))
-            {
-                if (MessageBeforeLoginTextBox.Text != "")
-                {
-                    if (File.Exists(MessageBeforeLoginTextBox.Text))
-                    {
-                        ConfigParser.setValue("Banner", "/cygdrive/" + MessageBeforeLoginTextBox.Text.Replace(@"\", "/").Replace(":", ""));
-                    }
-                    else
-                    {
-                        MessageBox.Show("ERROR: This file does not exist.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        error = true;
-                    }
-                }
-            }
 
-            if (!error)
+            if (installDir != "")
             {
-                ConfigParser.writeFile(installDir + @"\etc\sshd_config");
-                if (MessageBox.Show("Do you want to restart the service to load the changes?", "EasySSd", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                string motdFile = installDir + @"\etc\motd";
+
+                try
                 {
-                    StopButton.PerformClick();
-                    StartButton.PerformClick();
+                    this.readPlainFile(motdFile);
                 }
-                this.changed = false;
-                return true;
+                catch (FileNotFoundException)
+                {
+                    if (MessageBox.Show("The file for 'Message of the day' does not exist. Do you want to create one now?", "EasySSHd", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+                    {
+                        try
+                        {
+                            this.writePlainFile(motdFile, "");
+                        }
+                        catch (UnauthorizedAccessException)
+                        {
+                            MessageBox.Show("The file for 'Message of the day' is not writeable. Please check the permissions.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            errorMotd = true;
+                        }
+                    }
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    MessageBox.Show("The file for 'Message of the day' is not accessable. Please check the permissions.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    errorMotd = true;
+                }
+
+                string ListenAddress = ConfigParser.getValue("ListenAddress");
+                string Port = ConfigParser.getValue("Port");
+                string LoginGraceTime = ConfigParser.getValue("LoginGraceTime");
+                string MaxAuthTries = ConfigParser.getValue("MaxAuthTries");
+                string MaxSessions = ConfigParser.getValue("MaxSessions");
+                string PubkeyAuthentication = ConfigParser.getValue("PubkeyAuthentication");
+                string AuthorizedKeysFile = ConfigParser.getValue("AuthorizedKeysFile");
+                string PrintMotd = ConfigParser.getValue("PrintMotd");
+                string PrintLastLog = ConfigParser.getValue("PrintLastLog");
+                string TCPKeepAlive = ConfigParser.getValue("TCPKeepAlive");
+                string Compression = ConfigParser.getValue("Compression");
+                string ClientAliveInterval = ConfigParser.getValue("ClientAliveInterval");
+                string ClientAliveCountMax = ConfigParser.getValue("ClientAliveCountMax");
+                string MaxStartups = ConfigParser.getValue("MaxStartups");
+                string Banner = ConfigParser.getValue("Banner");
+
+                if (!(ListenAddress == ServerAddressTextBox.Text || (ListenAddress == "" && ServerAddressTextBox.Text == "0.0.0.0")))
+                {
+                    if (this.IsValidIP(ServerAddressTextBox.Text))
+                    {
+                        ConfigParser.setValue("ListenAddress", ServerAddressTextBox.Text);
+                    }
+                    else
+                    {
+                        MessageBox.Show("ERROR: The IP address is not valid.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        error = true;
+                    }
+                }
+                if (!(Port == ServerPortNumericUpDown.Value.ToString() || (Port == "" && ServerPortNumericUpDown.Value == 22)))
+                {
+                    ConfigParser.setValue("Port", ServerPortNumericUpDown.Value.ToString());
+                }
+                if (!(LoginGraceTime == LoginTimeNumericUpDown.Value.ToString() || (LoginTimeNumericUpDown.Value == 120 && LoginGraceTime == "")))
+                {
+                    ConfigParser.setValue("LoginGraceTime", LoginTimeNumericUpDown.Value.ToString());
+                }
+                if (!(MaxAuthTries == MaxAuthTriesNumericUpDown.Value.ToString() || (MaxAuthTriesNumericUpDown.Value == 6 && MaxAuthTries == "")))
+                {
+                    ConfigParser.setValue("MaxAuthTries", MaxAuthTriesNumericUpDown.Value.ToString());
+                }
+                if (!(MaxStartups == ConcurrentLoginsNumericUpDown.Value.ToString() || (ConcurrentLoginsNumericUpDown.Value == 10 && MaxStartups == "")))
+                {
+                    ConfigParser.setValue("MaxStartups", ConcurrentLoginsNumericUpDown.Value.ToString());
+                }
+                if (!(MaxSessions == MaxSessionsNumericUpDown.Value.ToString() || (MaxSessionsNumericUpDown.Value == 10 && MaxSessions == "")))
+                {
+                    ConfigParser.setValue("MaxSessions", MaxSessionsNumericUpDown.Value.ToString());
+                }
+                if (!((LoginPossibleWithCertificateCheckBox.Checked == false && PubkeyAuthentication == "no") ||
+                    (LoginPossibleWithCertificateCheckBox.Checked == true && PubkeyAuthentication == "yes")))
+                {
+                    if (LoginPossibleWithCertificateCheckBox.Checked == true)
+                    {
+                        ConfigParser.setValue("PubkeyAuthentication", "yes");
+                    }
+                    else
+                    {
+                        ConfigParser.setValue("PubkeyAuthentication", "no");
+                    }
+                }
+                if (!(getShownPath(AuthorizedKeysFile) == PathToCertificateTextBox.Text || (PathToCertificateTextBox.Text == "" && AuthorizedKeysFile == "")))
+                {
+                    if (PathToCertificateTextBox.Text != "")
+                    {
+                        if (File.Exists(PathToCertificateTextBox.Text))
+                        {
+                            ConfigParser.setValue("AuthorizedKeysFile", "/cygdrive/" + PathToCertificateTextBox.Text.Replace(@"\", "/").Replace(":", ""));
+                        }
+                        else
+                        {
+                            MessageBox.Show("ERROR: This file does not exist.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            error = true;
+                        }
+                    }
+                }
+                if (!((PrintMessageOfTheDayCheckBox.Checked == false && PrintMotd == "no") ||
+                    (PrintMessageOfTheDayCheckBox.Checked == true && PrintMotd == "yes")))
+                {
+                    if (PrintMessageOfTheDayCheckBox.Checked == true && errorMotd == false)
+                    {
+                        ConfigParser.setValue("PrintMotd", "yes");
+                    }
+                    else
+                    {
+                        ConfigParser.setValue("PrintMotd", "no");
+                    }
+                }
+                if (!(plainFileContent.ToString() == PrintMessageOfTheDayTextBox.Text || 
+                    (plainFileContent.ToString() == "" && PrintMessageOfTheDayTextBox.Text == "")) && errorMotd == false)
+                {
+                    this.writePlainFile(motdFile, PrintMessageOfTheDayTextBox.Text);
+                }
+                if (!((PrintLastLoginCheckBox.Checked == false && PrintLastLog == "no") ||
+                    (PrintLastLoginCheckBox.Checked == true && PrintLastLog == "yes")))
+                {
+                    if (PrintLastLoginCheckBox.Checked == true)
+                    {
+                        ConfigParser.setValue("PrintLastLog", "yes");
+                    }
+                    else
+                    {
+                        ConfigParser.setValue("PrintLastLog", "no");
+                    }
+                }
+                if (!((TestIfClientIsStillReachableCheckBox.Checked == false && TCPKeepAlive == "no") ||
+                    (TestIfClientIsStillReachableCheckBox.Checked == true && TCPKeepAlive == "yes")))
+                {
+                    if (TestIfClientIsStillReachableCheckBox.Checked == true)
+                    {
+                        ConfigParser.setValue("TCPKeepAlive", "yes");
+                    }
+                    else
+                    {
+                        ConfigParser.setValue("TCPKeepAlive", "no");
+                    }
+                }
+                if (!(Compression == CompressionComboBox.Text || (CompressionComboBox.Text == "delayed" && Compression == "")))
+                {
+                    switch (CompressionComboBox.Text)
+                    {
+                        case "on":
+                            ConfigParser.setValue("Compression", "yes");
+                            break;
+                        case "off":
+                            ConfigParser.setValue("Compression", "no");
+                            break;
+                        case "delayed":
+                            ConfigParser.setValue("Compression", "delayed");
+                            break;
+                        default:
+                            ConfigParser.setValue("Compression", "delayed");
+                            break;
+                    }
+                }
+                if (!(ClientAliveInterval == TestConnectionOfClientEveryNumericUpDown.Value.ToString() || (TestConnectionOfClientEveryNumericUpDown.Value == 0 && ClientAliveInterval == "")))
+                {
+                    ConfigParser.setValue("ClientAliveInterval", TestConnectionOfClientEveryNumericUpDown.Value.ToString());
+                }
+                if (!(ClientAliveCountMax == PassesNumericUpDown.Value.ToString() || (PassesNumericUpDown.Value == 3 && ClientAliveCountMax == "")))
+                {
+                    ConfigParser.setValue("ClientAliveCountMax", PassesNumericUpDown.Value.ToString());
+                }
+                if (!(getShownPath(Banner) == MessageBeforeLoginTextBox.Text || (MessageBeforeLoginTextBox.Text == "" && Banner == "")))
+                {
+                    if (MessageBeforeLoginTextBox.Text != "")
+                    {
+                        if (File.Exists(MessageBeforeLoginTextBox.Text))
+                        {
+                            ConfigParser.setValue("Banner", "/cygdrive/" + MessageBeforeLoginTextBox.Text.Replace(@"\", "/").Replace(":", ""));
+                        }
+                        else
+                        {
+                            MessageBox.Show("ERROR: This file does not exist.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            error = true;
+                        }
+                    }
+                }
+
+                if (!error)
+                {
+                    if (ConfigParser.writeFile(installDir + @"\etc\sshd_config") == 0)
+                    {
+                        LoggingBox.AppendText("Changes saved.");
+                        if (MessageBox.Show("Do you want to restart the service to load the changes?", "EasySSd", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        {
+                            StopButton.PerformClick();                            
+                            StartButton.PerformClick();
+                        }
+                        this.changed = false;
+                        return true;
+                    }
+                    if (ConfigParser.writeFile(installDir + @"\etc\sshd_config") == 1)
+                    {
+                        if (MessageBox.Show("File not writeable. Please check permissions?", "EasySSd", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) == DialogResult.Retry)
+                        {
+                            SaveChanges();
+                        }
+                        else
+                        {
+                            LoggingBox.AppendText("Saving aborted: Config file not writable.");
+                            return false;
+                        }
+                    }
+                    
+                }
             }
             return false;
         }
@@ -503,6 +551,7 @@ namespace EasySSHd
                 {
                     if (!this.SaveChanges())
                     {
+                        LoggingBox.AppendText("Saving aborted: An error occured while saving changes.");
                         MessageBox.Show("ERROR: Saving not possible!", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     Application.Exit();
@@ -521,6 +570,7 @@ namespace EasySSHd
             {
                 if (!this.SaveChanges())
                 {
+                    LoggingBox.AppendText("Saving aborted: An error occured while saving changes.");
                     MessageBox.Show("ERROR: Saving not possible!", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -551,6 +601,7 @@ namespace EasySSHd
         private void StartButton_Click(object sender, EventArgs e)
         {
             bool started = false;
+            LoggingBox.AppendText("Starting Service ...");
             try
             {
                 sshd.Start();
@@ -558,18 +609,20 @@ namespace EasySSHd
             }
             catch (InvalidOperationException)
             {
+                LoggingBox.AppendText("Service couldn't be started. Maybe already started.");
                 MessageBox.Show("ERROR: Service couldn't be started. Maybe it is already started.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 started = true;
             }
             if (sshd.Status == ServiceControllerStatus.Running && started == false)
             {
-                
+                LoggingBox.AppendText("Service started correctly");
             }
         }
 
         private void StopButton_Click(object sender, EventArgs e)
         {
             bool stopped = false;
+            LoggingBox.AppendText("Stopping Service ...");
             try
             {
                 sshd.Stop();
@@ -577,12 +630,13 @@ namespace EasySSHd
             }
             catch (InvalidOperationException)
             {
+                LoggingBox.AppendText("Service couldn't be stopped. Maybe already stopped.");
                 MessageBox.Show("ERROR: Service couldn't be stopped. Maybe it is already stopped.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 stopped = true;
             }
             if (sshd.Status == ServiceControllerStatus.Stopped && stopped == false)
             {
-                
+                LoggingBox.AppendText("Service stopped correctly.");
             }
         }
         
@@ -605,6 +659,7 @@ namespace EasySSHd
                 }
                 else
                 {
+                    LoggingBox.AppendText("Not a valid IP-address has been set.");
                     MessageBox.Show("ERROR: The ip-address you have set is not valid.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
