@@ -126,6 +126,7 @@ namespace EasySSHd
                 else
                 {
                     ServerAddressTextBox.Text = "0.0.0.0";
+                    LoggingBox.AppendText("An invalid IP was detected in the config file.!!!");
                 }
             }
             else
