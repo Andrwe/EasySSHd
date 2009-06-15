@@ -16,7 +16,7 @@ DefaultDirName={pf}\EasySSHd
 DefaultGroupName=EasySSHd
 AllowNoIcons=yes
 OutputBaseFilename=EasySSHd-setup
-WizardSmallImageFile=Z:\EasySSHd-Install\EasySSHd.bmp
+WizardSmallImageFile=icons\EasySSHd.bmp
 Compression=lzma
 SolidCompression=yes
 
@@ -24,11 +24,11 @@ SolidCompression=yes
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "Z:\EasySSHd-Install\cygwin\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "cygwin\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: "Z:\EasySSHd-Install\mercurial\bin\Release\EasySSHd.exe"; DestDir: "{app}\GUI"; Flags: ignoreversion
-Source: "Z:\EasySSHd-Install\mercurial\bin\Release\parser.dll"; DestDir: "{app}\GUI"; Flags: ignoreversion
-Source: "Z:\EasySSHd-Install\EasySSHd.ico"; DestDir: "{app}\GUI"; Flags: ignoreversion
+Source: "..\bin\Release\EasySSHd.exe"; DestDir: "{app}\GUI"; Flags: ignoreversion
+Source: "..\bin\Release\parser.dll"; DestDir: "{app}\GUI"; Flags: ignoreversion
+Source: "icons\EasySSHd.ico"; DestDir: "{app}\GUI"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{cm:UninstallProgram,EasySSHd}"; Filename: "{uninstallexe}"
