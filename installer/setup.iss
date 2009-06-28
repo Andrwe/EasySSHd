@@ -52,9 +52,38 @@ Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions\Cygwin\mounts v2\/usr/lib"; Value
 Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions\Cygwin\mounts v2\/usr/lib"; ValueType: dword; ValueName: "flags"; ValueData: "$0000000a"
 
 Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions\Cygwin\Program Options"; Flags: deletekey uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions\Cygwin\Program Options"; ValueType: string; ValueName: "EasySSHd-GUI-lang"; ValueData: "eng"
 
 [Run]
 Filename: "{app}\bin\bash.exe"; Parameters: "--login -i -c '/bin/chmod.exe a+x /var; /bin/mkpasswd.exe -lc > /etc/passwd; /bin/mkgroup.exe --local > /etc/group; /bin/ssh-host-config -y'"; Flags: runhidden
 
+[UninstallRun]
+Filename: "net stop sshd"; Parameters: ""; Flags: runhidden
+Filename: "{app}\bin\cygrunsrv.exe"; Parameters: "-R sshd"; Flags: runhidden
+
 [UninstallDelete]
 Type: filesandordirs; Name: {app}
+
+[Code]
+
+procedure InitializeWizard();
+var
+  reUnInstall: TInputOptionWizardPage;
+  test: String;
+begin
+  if RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygnus Solutions\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
+  begin
+    reUnInstall := CreateInputOptionPage(wpWelcome, 'Options', 'What do you want this setup to do?', 'Choose an option:', True, False);
+    reUnInstall.Add('Reinstall');
+    reUnInstall.Add('Uninstall');
+    if reUnInstall.Values[0] then
+    begin
+      test := 'Reinst';
+    end;
+    if reUnInstall.Values[1] then
+    begin
+      test := 'Uninst';
+    end;
+  end;
+  MsgBox(test,mbInformation,MB_OK);
+end;
