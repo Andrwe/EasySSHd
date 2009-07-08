@@ -65,7 +65,6 @@
             this.PrintLastLoginCheckBox = new System.Windows.Forms.CheckBox();
             this.PrintMessageOfTheDayCheckBox = new System.Windows.Forms.CheckBox();
             this.MessageBeforeLoginLabel = new System.Windows.Forms.Label();
-            this.LoggingBox = new System.Windows.Forms.TextBox();
             this.ApplyButton = new System.Windows.Forms.Button();
             this.quitButton = new System.Windows.Forms.Button();
             this.StartButton = new System.Windows.Forms.Button();
@@ -75,6 +74,9 @@
             this.openCertificate = new System.Windows.Forms.OpenFileDialog();
             this.openMessageBeforeLogin = new System.Windows.Forms.OpenFileDialog();
             this.LanguageLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.LogTabPage = new System.Windows.Forms.TabPage();
+            this.LoggingBox = new System.Windows.Forms.TextBox();
+            this.PictureBox = new System.Windows.Forms.PictureBox();
             this.ServerConnectionGB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ServerPortNumericUpDown)).BeginInit();
             this.LoginSecurityGB.SuspendLayout();
@@ -91,6 +93,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.TestConnectionOfClientEveryNumericUpDown)).BeginInit();
             this.OptionOneGroupBox.SuspendLayout();
             this.InfoTabPage.SuspendLayout();
+            this.LogTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // ServerAdressLabel
@@ -302,11 +306,12 @@
             this.TabControl.Controls.Add(this.CompressionTabPage);
             this.TabControl.Controls.Add(this.CheckingTabPage);
             this.TabControl.Controls.Add(this.InfoTabPage);
+            this.TabControl.Controls.Add(this.LogTabPage);
             this.TabControl.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TabControl.Location = new System.Drawing.Point(26, 209);
             this.TabControl.Name = "TabControl";
             this.TabControl.SelectedIndex = 0;
-            this.TabControl.Size = new System.Drawing.Size(530, 168);
+            this.TabControl.Size = new System.Drawing.Size(530, 213);
             this.TabControl.TabIndex = 6;
             // 
             // SSLTabPage
@@ -319,7 +324,7 @@
             this.SSLTabPage.Location = new System.Drawing.Point(4, 25);
             this.SSLTabPage.Name = "SSLTabPage";
             this.SSLTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.SSLTabPage.Size = new System.Drawing.Size(522, 139);
+            this.SSLTabPage.Size = new System.Drawing.Size(522, 184);
             this.SSLTabPage.TabIndex = 0;
             this.SSLTabPage.Text = "SSL";
             this.SSLTabPage.ToolTipText = "options regarding SSL";
@@ -371,7 +376,7 @@
             this.CompressionTabPage.Location = new System.Drawing.Point(4, 25);
             this.CompressionTabPage.Name = "CompressionTabPage";
             this.CompressionTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.CompressionTabPage.Size = new System.Drawing.Size(522, 139);
+            this.CompressionTabPage.Size = new System.Drawing.Size(522, 184);
             this.CompressionTabPage.TabIndex = 1;
             this.CompressionTabPage.Text = "Compression";
             this.CompressionTabPage.ToolTipText = "activate or deactivate compression";
@@ -397,7 +402,7 @@
             this.CheckingTabPage.Controls.Add(this.OptionOneGroupBox);
             this.CheckingTabPage.Location = new System.Drawing.Point(4, 25);
             this.CheckingTabPage.Name = "CheckingTabPage";
-            this.CheckingTabPage.Size = new System.Drawing.Size(522, 139);
+            this.CheckingTabPage.Size = new System.Drawing.Size(522, 184);
             this.CheckingTabPage.TabIndex = 2;
             this.CheckingTabPage.Text = "Checking";
             this.CheckingTabPage.ToolTipText = "connection testing and controling";
@@ -410,7 +415,7 @@
             this.OptionTwoGroupBox.Controls.Add(this.TestConnectionOfClientEveryLabel);
             this.OptionTwoGroupBox.Location = new System.Drawing.Point(17, 60);
             this.OptionTwoGroupBox.Name = "OptionTwoGroupBox";
-            this.OptionTwoGroupBox.Size = new System.Drawing.Size(482, 68);
+            this.OptionTwoGroupBox.Size = new System.Drawing.Size(482, 92);
             this.OptionTwoGroupBox.TabIndex = 6;
             this.OptionTwoGroupBox.TabStop = false;
             this.OptionTwoGroupBox.Text = "Option 2";
@@ -503,7 +508,7 @@
             this.InfoTabPage.Controls.Add(this.MessageBeforeLoginLabel);
             this.InfoTabPage.Location = new System.Drawing.Point(4, 25);
             this.InfoTabPage.Name = "InfoTabPage";
-            this.InfoTabPage.Size = new System.Drawing.Size(522, 139);
+            this.InfoTabPage.Size = new System.Drawing.Size(522, 184);
             this.InfoTabPage.TabIndex = 3;
             this.InfoTabPage.Text = "Info";
             this.InfoTabPage.ToolTipText = "information printed before or after login";
@@ -569,18 +574,6 @@
             this.MessageBeforeLoginLabel.Size = new System.Drawing.Size(131, 16);
             this.MessageBeforeLoginLabel.TabIndex = 1;
             this.MessageBeforeLoginLabel.Text = "Message before login";
-            // 
-            // LoggingBox
-            // 
-            this.LoggingBox.BackColor = System.Drawing.SystemColors.Control;
-            this.LoggingBox.Location = new System.Drawing.Point(26, 383);
-            this.LoggingBox.Multiline = true;
-            this.LoggingBox.Name = "LoggingBox";
-            this.LoggingBox.ReadOnly = true;
-            this.LoggingBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.LoggingBox.Size = new System.Drawing.Size(530, 39);
-            this.LoggingBox.TabIndex = 7;
-            this.LoggingBox.Text = "EasySSHd Logging:";
             // 
             // ApplyButton
             // 
@@ -661,6 +654,37 @@
             this.LanguageLinkLabel.TabStop = true;
             this.LanguageLinkLabel.Text = "Language";
             // 
+            // LogTabPage
+            // 
+            this.LogTabPage.BackColor = System.Drawing.SystemColors.Control;
+            this.LogTabPage.Controls.Add(this.LoggingBox);
+            this.LogTabPage.Location = new System.Drawing.Point(4, 25);
+            this.LogTabPage.Name = "LogTabPage";
+            this.LogTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.LogTabPage.Size = new System.Drawing.Size(522, 184);
+            this.LogTabPage.TabIndex = 4;
+            this.LogTabPage.Text = "Log";
+            // 
+            // LoggingBox
+            // 
+            this.LoggingBox.BackColor = System.Drawing.SystemColors.Control;
+            this.LoggingBox.Location = new System.Drawing.Point(6, 6);
+            this.LoggingBox.Multiline = true;
+            this.LoggingBox.Name = "LoggingBox";
+            this.LoggingBox.ReadOnly = true;
+            this.LoggingBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.LoggingBox.Size = new System.Drawing.Size(510, 172);
+            this.LoggingBox.TabIndex = 8;
+            this.LoggingBox.Text = "EasySSHd Logging:";
+            // 
+            // PictureBox
+            // 
+            this.PictureBox.Location = new System.Drawing.Point(197, 429);
+            this.PictureBox.Name = "PictureBox";
+            this.PictureBox.Size = new System.Drawing.Size(37, 27);
+            this.PictureBox.TabIndex = 16;
+            this.PictureBox.TabStop = false;
+            // 
             // EasySSHdWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -668,6 +692,7 @@
             this.BackColor = System.Drawing.SystemColors.Control;
             this.CancelButton = this.quitButton;
             this.ClientSize = new System.Drawing.Size(584, 464);
+            this.Controls.Add(this.PictureBox);
             this.Controls.Add(this.LanguageLinkLabel);
             this.Controls.Add(this.DefaultsButton);
             this.Controls.Add(this.HelpLinkLabel);
@@ -675,11 +700,13 @@
             this.Controls.Add(this.StartButton);
             this.Controls.Add(this.quitButton);
             this.Controls.Add(this.ApplyButton);
-            this.Controls.Add(this.LoggingBox);
             this.Controls.Add(this.TabControl);
             this.Controls.Add(this.LoginSecurityGB);
             this.Controls.Add(this.ServerConnectionGB);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(592, 498);
+            this.MinimumSize = new System.Drawing.Size(592, 498);
             this.Name = "EasySSHdWindow";
             this.Text = "EasySSHd";
             this.Load += new System.EventHandler(this.EasySSHdWindow_Load);
@@ -705,6 +732,9 @@
             this.OptionOneGroupBox.PerformLayout();
             this.InfoTabPage.ResumeLayout(false);
             this.InfoTabPage.PerformLayout();
+            this.LogTabPage.ResumeLayout(false);
+            this.LogTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -721,7 +751,6 @@
         private System.Windows.Forms.TabControl TabControl;
         private System.Windows.Forms.TabPage SSLTabPage;
         private System.Windows.Forms.TabPage CompressionTabPage;
-        private System.Windows.Forms.TextBox LoggingBox;
         private System.Windows.Forms.Button ApplyButton;
         private System.Windows.Forms.Button quitButton;
         private System.Windows.Forms.Label MaxSessionsLabel;
@@ -759,6 +788,9 @@
         private System.Windows.Forms.OpenFileDialog openMessageBeforeLogin;
         private System.Windows.Forms.LinkLabel LanguageLinkLabel;
         private System.Windows.Forms.TextBox MessageBeforeLoginTextBox;
+        private System.Windows.Forms.TabPage LogTabPage;
+        private System.Windows.Forms.TextBox LoggingBox;
+        private System.Windows.Forms.PictureBox PictureBox;
     }
 }
 
