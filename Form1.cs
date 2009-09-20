@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -601,6 +602,44 @@ namespace EasySSHd
 
         private void StartButton_Click(object sender, EventArgs e)
         {
+            ArrayList ips = new ArrayList();
+
+            foreach (NetworkInterface netif in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                IPInterfaceProperties properties = netif.GetIPProperties();
+                foreach (IPAddressInformation unicast in properties.UnicastAddresses)
+                {
+                    ips.Add(unicast.Address);
+                }
+            }
+
+            string currentIP = ServerAddressTextBox.Text;
+            bool isValid = false;
+
+            if (currentIP != "0.0.0.0")
+            {
+                foreach (IPAddress ip in ips)
+                {
+                    if (currentIP == ip.ToString())
+                    {
+                        isValid = true;
+                        break;
+                    }
+                }
+            } else
+            {
+                isValid = true;
+            }
+
+            if (!isValid)
+            {
+                LoggingBox.AppendText("The currently set IP doesn't match any of the available Adapters");
+                MessageBox.Show("ERROR: The currently set IP doesn't match any of the available Adapters! The Service will not be started.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+
+
             bool started = false;
             LoggingBox.AppendText("\r\nStarting Service ...");
             try
