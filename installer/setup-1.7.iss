@@ -54,26 +54,35 @@ Filename: "{app}\bin\cygrunsrv.exe"; Parameters: "-R sshd"; Flags: runhidden
 Type: filesandordirs; Name: {app}
 
 [Code]
-
-procedure InitializeWizard();
 var
   reUnInstall: TInputOptionWizardPage;
-  test: String;
+
+procedure InitializeWizard;
 begin
-  if RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygnus Solutions\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
+  if RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
   begin
     reUnInstall := CreateInputOptionPage(wpWelcome, 'Options', 'What do you want this setup to do?', 'Choose an option:', True, False);
     reUnInstall.Add('Reinstall');
     reUnInstall.Add('Uninstall');
+  end;
+end;
+
+function NextButtonClick(CurPageID: Integer): Boolean;
+var
+  ResultCode: Integer;
+begin
+  MsgBox('hello',mbInformation,MB_OK);
+  if CurPageID = reUnInstall.ID then
+  begin
     if reUnInstall.Values[0] then
     begin
-      test := 'Reinst';
-    end;
-    if reUnInstall.Values[1] then
-    begin
-      test := 'Uninst';
+      if Exec(ExpandConstant('{app}/unins000.exe'), '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode) then
+      begin
+        Exec(ExpandConstant('{srcexe}'), '', '', SW_SHOW, ewNoWait, ResultCode);
+        Exit;
+      end;
     end;
   end;
-  MsgBox(test,mbInformation,MB_OK);
+  Result := True;
 end;
 
