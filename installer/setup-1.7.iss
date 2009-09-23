@@ -67,22 +67,48 @@ begin
   end;
 end;
 
+procedure CurPageChanged(CurPageID: Integer);
+begin
+  if RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
+  begin
+    if (CurPageID = wpUserInfo) and (reUnInstall.Values[1]) then
+    begin
+        WizardForm.NextButton.Caption := 'Finish';
+        WizardForm.CancelButton.Visible := false;
+    end;
+  end;
+end;
+
 function NextButtonClick(CurPageID: Integer): Boolean;
 var
   ResultCode: Integer;
+  AppDir: String;
 begin
-  MsgBox('hello',mbInformation,MB_OK);
-  if CurPageID = reUnInstall.ID then
+  if RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
   begin
-    if reUnInstall.Values[0] then
-    begin
-      if Exec(ExpandConstant('{app}/unins000.exe'), '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode) then
+    RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\Cygwin\setup', 'rootdir', AppDir);
+    try
+      if (CurPageID = wpFinished) then
+        Result := True
+      else if CurPageID = reUnInstall.ID then
       begin
-        Exec(ExpandConstant('{srcexe}'), '', '', SW_SHOW, ewNoWait, ResultCode);
-        Exit;
+        if reUnInstall.Values[0] then
+        begin
+          Exec(AppDir + '\unins000.exe', '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode)
+          Result := True;
+        end;
+        if reUnInstall.Values[1]  then
+        begin
+          Exec(AppDir + '\unins000.exe', '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode)
+          Result := True;
+        end;
       end;
+    except
+        Result := True;
     end;
+    Result := False;
   end;
   Result := True;
 end;
+
 
