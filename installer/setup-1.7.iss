@@ -56,6 +56,15 @@ Type: filesandordirs; Name: {app}
 [Code]
 var
   reUnInstall: TInputOptionWizardPage;
+  afterUninstall: TWizardPage;
+
+procedure CreateWizardPages;
+begin
+  if RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
+  begin
+    afterUninstall := CreateCustomPage(reUnInstall.ID, 'Unistallation finished.', '');
+  end;
+end;
 
 procedure InitializeWizard;
 begin
@@ -64,6 +73,7 @@ begin
     reUnInstall := CreateInputOptionPage(wpWelcome, 'Options', 'What do you want this setup to do?', 'Choose an option:', True, False);
     reUnInstall.Add('Reinstall');
     reUnInstall.Add('Uninstall');
+    CreateWizardPages;
   end;
 end;
 
@@ -71,11 +81,23 @@ procedure CurPageChanged(CurPageID: Integer);
 begin
   if RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
   begin
-    if (CurPageID = wpUserInfo) and (reUnInstall.Values[1]) then
+    if (CurPageID = afterUninstall.ID) and (reUnInstall.Values[1]) then
     begin
-        WizardForm.NextButton.Caption := 'Finish';
-        WizardForm.CancelButton.Visible := false;
+      WizardForm.NextButton.Caption := 'Finish';
+      WizardForm.CancelButton.Visible := false;
     end;
+  end;
+end;
+
+function ShouldSkipPage(CurPageID: Integer): Boolean;
+begin
+  if RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
+  begin
+    if (CurPageID = afterUninstall.ID) and not (reUnInstall.Values[1]) then
+    begin
+      Result := True;
+    end;
+    Result := False;
   end;
 end;
 
@@ -100,6 +122,11 @@ begin
         if reUnInstall.Values[1]  then
         begin
           Exec(AppDir + '\unins000.exe', '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode)
+          if ResultCode = 0 then
+          begin
+            WizardForm.NextButton.Caption := 'Finish';
+            WizardForm.CancelButton.Visible := false;
+          end;
           Result := True;
         end;
       end;
@@ -110,5 +137,6 @@ begin
   end;
   Result := True;
 end;
+
 
 
