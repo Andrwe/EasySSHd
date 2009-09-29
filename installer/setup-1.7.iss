@@ -54,27 +54,24 @@ Filename: "{app}\bin\cygrunsrv.exe"; Parameters: "-R sshd"; Flags: runhidden
 Type: filesandordirs; Name: {app}
 
 [Code]
+const
+  WM_QUIT = $0012;
 var
   reUnInstall: TInputOptionWizardPage;
   afterUninstall: TWizardPage;
 
 procedure CreateWizardPages;
 begin
-  if RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
-  begin
+    reUnInstall := CreateInputOptionPage(wpWelcome, 'Options', 'What do you want this setup to do?', 'Choose an option:', True, False);
+    reUnInstall.Add('Reinstall');
+    reUnInstall.Add('Uninstall');
+
     afterUninstall := CreateCustomPage(reUnInstall.ID, 'Unistallation finished.', '');
-  end;
 end;
 
 procedure InitializeWizard;
 begin
-  if RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
-  begin
-    reUnInstall := CreateInputOptionPage(wpWelcome, 'Options', 'What do you want this setup to do?', 'Choose an option:', True, False);
-    reUnInstall.Add('Reinstall');
-    reUnInstall.Add('Uninstall');
     CreateWizardPages;
-  end;
 end;
 
 procedure CurPageChanged(CurPageID: Integer);
@@ -93,12 +90,17 @@ function ShouldSkipPage(CurPageID: Integer): Boolean;
 begin
   if RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
   begin
-    if (CurPageID = afterUninstall.ID) and not (reUnInstall.Values[1]) then
+    if (CurPageID = afterUninstall.ID) and (reUnInstall.Values[0]) then
     begin
       Result := True;
-    end;
+    end
+    else
+      Result := False;
+  end
+  else if (CurPageID = reUnInstall.ID) then
+    Result := True
+  else
     Result := False;
-  end;
 end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
@@ -122,13 +124,13 @@ begin
         if reUnInstall.Values[1]  then
         begin
           Exec(AppDir + '\unins000.exe', '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode)
-          if ResultCode = 0 then
-          begin
-            WizardForm.NextButton.Caption := 'Finish';
-            WizardForm.CancelButton.Visible := false;
-          end;
           Result := True;
         end;
+      end;
+      if (CurPageID = afterUninstall.ID) then
+      begin
+        PostMessage(WizardForm.Handle, WM_QUIT, 0, 0);
+        Result := False;
       end;
     except
         Result := True;
@@ -137,6 +139,7 @@ begin
   end;
   Result := True;
 end;
+
 
 
 
