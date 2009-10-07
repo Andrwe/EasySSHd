@@ -5,7 +5,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{69821B90-D3FD-44AA-A07D-0A6B431F4FB1}
+AppId={{69821B90-D3FD-44AA-A07D-0A6B431F4FB1}}
 AppName=EasySSHd
 AppVerName=EasySSHd 0.1.0
 AppPublisher=RENONA-Studios
@@ -140,6 +140,7 @@ begin
   end;
   Result := True;
 end;
+
 
 
 

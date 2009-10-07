@@ -21,7 +21,7 @@ namespace EasySSHd
     {
         private bool changed = false; // global change indicator
         private parser.parser ConfigParser = new parser.parser(); // global config-parser instance
-        private RegistryKey installDirRegKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Cygnus Solutions\Cygwin\mounts v2\/", false);
+        private RegistryKey installDirRegKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Cygwin\setup", false);
         private ArrayList plainFileContent = new ArrayList();
         ServiceController sshd = new ServiceController("sshd");
                 
@@ -39,7 +39,7 @@ namespace EasySSHd
             string installDir = "";
             try
             {
-                installDir = installDirRegKey.GetValue("native").ToString();
+                installDir = installDirRegKey.GetValue("rootdir").ToString();
             }
             catch (NullReferenceException)
             {
@@ -311,7 +311,7 @@ namespace EasySSHd
             string installDir = "";
             try
             {
-                installDir = installDirRegKey.GetValue("native").ToString();
+                installDir = installDirRegKey.GetValue("rootdir").ToString();
             }
             catch (NullReferenceException)
             {
@@ -637,8 +637,6 @@ namespace EasySSHd
                 MessageBox.Show("ERROR: The currently set IP doesn't match any of the available Adapters! The Service will not be started.", "EasySSHd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
-
 
             bool started = false;
             LoggingBox.AppendText("\r\nStarting Service ...");
