@@ -28,7 +28,7 @@ Source: "cygwin\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs create
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 Source: "..\bin\Release\EasySSHd.exe"; DestDir: "{app}\GUI"; Flags: ignoreversion
 Source: "..\bin\Release\parser.dll"; DestDir: "{app}\GUI"; Flags: ignoreversion
-Source: "..\bin\unix2dos.exe"; DestDir: "{app}\GUI"; Flags: ignoreversion
+Source: "unix2dos.exe"; DestDir: "{app}\GUI"; Flags: ignoreversion
 Source: "icons\EasySSHd.ico"; DestDir: "{app}\GUI"; Flags: ignoreversion
 
 [Icons]
@@ -50,8 +50,8 @@ Filename: "{app}\bin\bash.exe"; Parameters: "--login -i -c '/bin/chmod.exe a+x /
 [UninstallRun]
 Filename: "net stop sshd"; Parameters: ""; Flags: runhidden
 Filename: "{app}\bin\cygrunsrv.exe"; Parameters: "-R sshd"; Flags: runhidden
-Filename: "{app}\bin\sed.exe"; Parameters: " -i /ssh/d '{sys}\drivers\etc\services'"
-Filename: "{app}\GUI\unix2dos.exe"; Parameters: " {sys}\drivers\etc\services"
+Filename: "{app}\bin\sed.exe"; Parameters: " -i /ssh/d '{sys}\drivers\etc\services'"; Flags: runhidden
+Filename: "{app}\GUI\unix2dos.exe"; Parameters: " {sys}\drivers\etc\services"; Flags: runhidden
 
 
 [UninstallDelete]
@@ -93,9 +93,7 @@ begin
   if (CurPageID = reUnInstall.ID) and not RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
     Result := True
   else if (CurPageID = afterUninstall.ID) and not reUnInstall.Values[1] then
-  begin
-    Result := True;
-  end
+    Result := True
   else
     Result := False;
 end;
@@ -116,12 +114,13 @@ begin
         if reUnInstall.Values[0] then
         begin
           Exec(AppDir + '\unins000.exe', '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode)
-          if (ResultCode = 0) then
-            Result := True
-          else
+          if (ResultCode <> 0) then
+          begin
             MsgBox('An error occured while uninstalling installed version of EasySSHd. Please try again.', mbCriticalError, MB_OK);
             Result := False;
             Exit;
+          end;
+          Result := True
         end;
         if reUnInstall.Values[1]  then
         begin
