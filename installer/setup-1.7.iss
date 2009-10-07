@@ -28,6 +28,7 @@ Source: "cygwin\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs create
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 Source: "..\bin\Release\EasySSHd.exe"; DestDir: "{app}\GUI"; Flags: ignoreversion
 Source: "..\bin\Release\parser.dll"; DestDir: "{app}\GUI"; Flags: ignoreversion
+Source: "..\bin\unix2dos.exe"; DestDir: "{app}\GUI"; Flags: ignoreversion
 Source: "icons\EasySSHd.ico"; DestDir: "{app}\GUI"; Flags: ignoreversion
 
 [Icons]
@@ -44,11 +45,14 @@ Root: HKLM; Subkey: "SOFTWARE\Cygwin\Program Options"; Flags: deletekey uninsdel
 Root: HKLM; Subkey: "SOFTWARE\Cygwin\Program Options"; ValueType: string; ValueName: "EasySSHd-GUI-lang"; ValueData: "eng"
 
 [Run]
-Filename: "{app}\bin\bash.exe"; Parameters: "--login -i -c '/bin/chmod.exe a+x /var; /bin/mkpasswd.exe -lc > /etc/passwd; /bin/mkgroup.exe --local > /etc/group; /bin/ssh-host-config -y'"; Flags: runhidden
+Filename: "{app}\bin\bash.exe"; Parameters: "--login -i -c '/bin/chmod.exe a+x /var; /bin/mkpasswd.exe -l -c > /etc/passwd; /bin/mkgroup.exe --local > /etc/group; /bin/ssh-host-config -y'"; Flags: runhidden
 
 [UninstallRun]
 Filename: "net stop sshd"; Parameters: ""; Flags: runhidden
 Filename: "{app}\bin\cygrunsrv.exe"; Parameters: "-R sshd"; Flags: runhidden
+Filename: "{app}\bin\sed.exe"; Parameters: " -i /ssh/d '{sys}\drivers\etc\services'"
+Filename: "{app}\GUI\unix2dos.exe"; Parameters: " {sys}\drivers\etc\services"
+
 
 [UninstallDelete]
 Type: filesandordirs; Name: {app}
@@ -65,6 +69,7 @@ begin
     reUnInstall := CreateInputOptionPage(wpWelcome, 'Options', 'What do you want this setup to do?', 'Choose an option:', True, False);
     reUnInstall.Add('Reinstall');
     reUnInstall.Add('Uninstall');
+    reUnInstall.Values[0] := True;
 
     afterUninstall := CreateCustomPage(reUnInstall.ID, 'Unistallation finished.', '');
 end;
@@ -76,29 +81,21 @@ end;
 
 procedure CurPageChanged(CurPageID: Integer);
 begin
-  if RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
+  if (CurPageID = afterUninstall.ID) and (reUnInstall.Values[1]) then
   begin
-    if (CurPageID = afterUninstall.ID) and (reUnInstall.Values[1]) then
-    begin
-      WizardForm.NextButton.Caption := 'Finish';
-      WizardForm.CancelButton.Visible := false;
-    end;
+    WizardForm.NextButton.Caption := 'Finish';
+    WizardForm.CancelButton.Visible := false;
   end;
 end;
 
 function ShouldSkipPage(CurPageID: Integer): Boolean;
 begin
-  if RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
-  begin
-    if (CurPageID = afterUninstall.ID) and (reUnInstall.Values[0]) then
-    begin
-      Result := True;
-    end
-    else
-      Result := False;
-  end
-  else if (CurPageID = reUnInstall.ID) then
+  if (CurPageID = reUnInstall.ID) and not RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
     Result := True
+  else if (CurPageID = afterUninstall.ID) and not reUnInstall.Values[1] then
+  begin
+    Result := True;
+  end
   else
     Result := False;
 end;
@@ -119,7 +116,12 @@ begin
         if reUnInstall.Values[0] then
         begin
           Exec(AppDir + '\unins000.exe', '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode)
-          Result := True;
+          if (ResultCode = 0) then
+            Result := True
+          else
+            MsgBox('An error occured while uninstalling installed version of EasySSHd. Please try again.', mbCriticalError, MB_OK);
+            Result := False;
+            Exit;
         end;
         if reUnInstall.Values[1]  then
         begin
@@ -127,18 +129,20 @@ begin
           Result := True;
         end;
       end;
-      if (CurPageID = afterUninstall.ID) then
-      begin
-        PostMessage(WizardForm.Handle, WM_QUIT, 0, 0);
-        Result := False;
-      end;
     except
         Result := True;
     end;
     Result := False;
   end;
+  if (CurPageID = afterUninstall.ID) then
+  begin
+    PostMessage(WizardForm.Handle, WM_QUIT, 0, 0);
+    Result := False;
+  end;
   Result := True;
 end;
+
+
 
 
 
