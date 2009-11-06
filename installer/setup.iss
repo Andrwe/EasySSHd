@@ -5,7 +5,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{69821B90-D3FD-44AA-A07D-0A6B431F4FB1}
+AppId={{69821B90-D3FD-44AA-A07D-0A6B431F4FB1}}
 AppName=EasySSHd
 AppVerName=EasySSHd 0.1.0
 AppPublisher=RENONA-Studios
@@ -28,6 +28,7 @@ Source: "cygwin\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs create
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 Source: "..\bin\Release\EasySSHd.exe"; DestDir: "{app}\GUI"; Flags: ignoreversion
 Source: "..\bin\Release\parser.dll"; DestDir: "{app}\GUI"; Flags: ignoreversion
+Source: "unix2dos.exe"; DestDir: "{app}\GUI"; Flags: ignoreversion
 Source: "icons\EasySSHd.ico"; DestDir: "{app}\GUI"; Flags: ignoreversion
 
 [Icons]
@@ -36,54 +37,114 @@ Name: "{group}\EasySSHd"; Filename: "{app}\GUI\EasySSHd.exe"; IconFilename: "{ap
 Name: "{commondesktop}\EasySSHd"; Filename: "{app}\GUI\EasySSHd.exe"; IconFilename: "{app}\GUI\EasySSHd.ico"; Comment: "Windows SSH-server with GUI by RENONA Studios"
 
 [Registry]
-Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions"; Flags: deletekey uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions\Cygwin"; Flags: deletekey uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Cygwin"; Flags: deletekey uninsdeletekey
 
-Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions\Cygwin\mounts v2"; ValueType: string; ValueName: "cygdrive prefix"; ValueData: "/cygdrive"
-Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions\Cygwin\mounts v2"; ValueType: dword; ValueName: "cygdrive flags"; ValueData: "$00000022"
+Root: HKLM; Subkey: "SOFTWARE\Cygwin\setup"; ValueType: string; ValueName: "rootdir"; ValueData: "{app}"
 
-Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions\Cygwin\mounts v2\/"; ValueType: string; ValueName: "native"; ValueData: "{app}"
-Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions\Cygwin\mounts v2\/"; ValueType: dword; ValueName: "flags"; ValueData: "$0000000a"
-
-Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions\Cygwin\mounts v2\/usr/bin"; ValueType: string; ValueName: "native"; ValueData: "{app}/bin"
-Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions\Cygwin\mounts v2\/usr/bin"; ValueType: dword; ValueName: "flags"; ValueData: "$0000000a"
-
-Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions\Cygwin\mounts v2\/usr/lib"; ValueType: string; ValueName: "native"; ValueData: "{app}/lib"
-Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions\Cygwin\mounts v2\/usr/lib"; ValueType: dword; ValueName: "flags"; ValueData: "$0000000a"
-
-Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions\Cygwin\Program Options"; Flags: deletekey uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Cygnus Solutions\Cygwin\Program Options"; ValueType: string; ValueName: "EasySSHd-GUI-lang"; ValueData: "eng"
+Root: HKLM; Subkey: "SOFTWARE\Cygwin\Program Options"; Flags: deletekey uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Cygwin\Program Options"; ValueType: string; ValueName: "EasySSHd-GUI-lang"; ValueData: "eng"
 
 [Run]
-Filename: "{app}\bin\bash.exe"; Parameters: "--login -i -c '/bin/chmod.exe a+x /var; /bin/mkpasswd.exe -lc > /etc/passwd; /bin/mkgroup.exe --local > /etc/group; /bin/ssh-host-config -y'"; Flags: runhidden
+Filename: "{app}\bin\bash.exe"; Parameters: "--login -i -c '/bin/chmod.exe a+x /var; /bin/mkpasswd.exe -l -c > /etc/passwd; /bin/mkgroup.exe --local > /etc/group; /bin/ssh-host-config -y'"
 
 [UninstallRun]
 Filename: "net stop sshd"; Parameters: ""; Flags: runhidden
 Filename: "{app}\bin\cygrunsrv.exe"; Parameters: "-R sshd"; Flags: runhidden
+Filename: "{app}\bin\sed.exe"; Parameters: " -i /ssh/d '{sys}\drivers\etc\services'"; Flags: runhidden
+Filename: "{app}\GUI\unix2dos.exe"; Parameters: " {sys}\drivers\etc\services"; Flags: runhidden
+
 
 [UninstallDelete]
 Type: filesandordirs; Name: {app}
 
 [Code]
-
-procedure InitializeWizard();
+const
+  WM_QUIT = $0012;
 var
   reUnInstall: TInputOptionWizardPage;
-  test: String;
+  afterUninstall: TWizardPage;
+
+procedure CreateWizardPages;
 begin
-  if RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygnus Solutions\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
-  begin
     reUnInstall := CreateInputOptionPage(wpWelcome, 'Options', 'What do you want this setup to do?', 'Choose an option:', True, False);
     reUnInstall.Add('Reinstall');
     reUnInstall.Add('Uninstall');
-    if reUnInstall.Values[0] then
-    begin
-      test := 'Reinst';
-    end;
-    if reUnInstall.Values[1] then
-    begin
-      test := 'Uninst';
-    end;
-  end;
-  MsgBox(test,mbInformation,MB_OK);
+    reUnInstall.Values[0] := True;
+
+    afterUninstall := CreateCustomPage(reUnInstall.ID, 'Unistallation finished.', '');
 end;
+
+procedure InitializeWizard;
+begin
+    CreateWizardPages;
+end;
+
+procedure CurPageChanged(CurPageID: Integer);
+begin
+  if (CurPageID = afterUninstall.ID) and (reUnInstall.Values[1]) then
+  begin
+    WizardForm.NextButton.Caption := 'Finish';
+    WizardForm.CancelButton.Visible := false;
+  end;
+end;
+
+function ShouldSkipPage(CurPageID: Integer): Boolean;
+begin
+  if (CurPageID = reUnInstall.ID) and not RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
+    Result := True
+  else if (CurPageID = afterUninstall.ID) and not reUnInstall.Values[1] then
+    Result := True
+  else
+    Result := False;
+end;
+
+function NextButtonClick(CurPageID: Integer): Boolean;
+var
+  ResultCode: Integer;
+  AppDir: String;
+begin
+  if RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Cygwin\\Program Options', 'EasySSHd-GUI-lang') then
+  begin
+    RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\Cygwin\setup', 'rootdir', AppDir);
+    try
+      if (CurPageID = wpFinished) then
+        Result := True
+      else if CurPageID = reUnInstall.ID then
+      begin
+        if reUnInstall.Values[0] then
+        begin
+          Exec(AppDir + '\unins000.exe', '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode)
+          if (ResultCode <> 0) then
+          begin
+            MsgBox('An error occured while uninstalling installed version of EasySSHd. Please try again.', mbCriticalError, MB_OK);
+            Result := False;
+            Exit;
+          end;
+          Result := True
+        end;
+        if reUnInstall.Values[1]  then
+        begin
+          Exec(AppDir + '\unins000.exe', '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode)
+          Result := True;
+        end;
+      end;
+    except
+        Result := True;
+    end;
+    Result := False;
+  end;
+  if (CurPageID = afterUninstall.ID) then
+  begin
+    PostMessage(WizardForm.Handle, WM_QUIT, 0, 0);
+    Result := False;
+  end;
+  Result := True;
+end;
+
+
+
+
+
+
+
+
