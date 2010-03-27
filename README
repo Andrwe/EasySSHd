@@ -1,0 +1,4 @@
+EasySSHd
+
+EasySSHd is a cygwin based SSH server for Windows with a GUI written in C#.
+The GUI is used to configure the daemon.
