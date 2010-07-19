@@ -7,7 +7,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{69821B90-D3FD-44AA-A07D-0A6B431F4FB1}}
 AppName=EasySSHd
-AppVerName=EasySSHd 0.1.0
+AppVerName=EasySSHd 0.2.0
 AppPublisher=RENONA-Studios
 AppPublisherURL=http://renona-studios.org
 AppSupportURL=http://renona-studios.org
@@ -19,6 +19,8 @@ OutputBaseFilename=EasySSHd-setup
 WizardSmallImageFile=icons\EasySSHd.bmp
 Compression=lzma
 SolidCompression=yes
+PrivilegesRequired=admin
+
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -30,6 +32,7 @@ Source: "..\bin\Release\EasySSHd.exe"; DestDir: "{app}\GUI"; Flags: ignoreversio
 Source: "..\bin\Release\parser.dll"; DestDir: "{app}\GUI"; Flags: ignoreversion
 Source: "unix2dos.exe"; DestDir: "{app}\GUI"; Flags: ignoreversion
 Source: "icons\EasySSHd.ico"; DestDir: "{app}\GUI"; Flags: ignoreversion
+Source: "post_install.sh"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{cm:UninstallProgram,EasySSHd}"; Filename: "{uninstallexe}"
@@ -45,7 +48,7 @@ Root: HKLM; Subkey: "SOFTWARE\Cygwin\Program Options"; Flags: deletekey uninsdel
 Root: HKLM; Subkey: "SOFTWARE\Cygwin\Program Options"; ValueType: string; ValueName: "EasySSHd-GUI-lang"; ValueData: "eng"
 
 [Run]
-Filename: "{app}\bin\bash.exe"; Parameters: "--login -i -c '/bin/chmod.exe a+x /var; /bin/mkpasswd.exe -l -c > /etc/passwd; /bin/mkgroup.exe --local > /etc/group; /bin/ssh-host-config -y'"
+Filename: "{app}\bin\bash.exe"; Parameters: "--login -c /post_install.sh {app}"
 
 [UninstallRun]
 Filename: "net stop sshd"; Parameters: ""; Flags: runhidden
@@ -140,6 +143,9 @@ begin
   end;
   Result := True;
 end;
+
+
+
 
 
 
